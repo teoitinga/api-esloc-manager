@@ -314,7 +314,11 @@ public class GerenciadorImpl implements Gerenciador {
 		// LocalDate.now().format(folderDate.folderDateTimeFormater());
 		// fileName.append(dataAtual);
 		// 3a Parte: -CODIGO_DE_BUSCA COMPOSTA PELO CPFDIAMESANO
-		LocalDateTime dataDoAtendimentoTime = dataDoAtendimento.atTime(0, 0); 
+		//obtem a hora atual
+		Integer hora = LocalDateTime.now().getHour();
+		//obtem os minutos
+		Integer minuto = LocalDateTime.now().getMinute();
+		LocalDateTime dataDoAtendimentoTime = dataDoAtendimento.atTime(hora, minuto); 
 try {
 	fileName.append(dataDoAtendimentoTime.format(folderDate.keyDateTimeFormater()));
 	

@@ -55,13 +55,28 @@ public class Persona {
 	private LocalDateTime dataAtualizacao;
 	
 	@Column
-	private EnumType tipo;
+	private EnumType categoria;
 	
 	@Column
 	private EnumPermissao permissao;
 	
 	@Column
 	private String password;
+	
+	@Column
+	private String municipio;
+	
+	@Column
+	private String endereco;
+
+	@Column
+	private String cpfCadastrante;
+
+	@Column
+	private EnumGender sexo;
+
+	@Column
+	private EnumEscolaridade escolaridade;
 
 	@Column
 	private Integer coclusaoCadastro;

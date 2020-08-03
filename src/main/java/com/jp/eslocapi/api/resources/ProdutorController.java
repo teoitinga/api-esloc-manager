@@ -62,7 +62,7 @@ public class ProdutorController {
 		
 		Persona toSaved = service.getById(id);
 		
-		toSaved.setTipo(EnumType.AGRICULTOR_FAMILIAR);
+		toSaved.setCategoria(EnumType.AGRICULTOR_FAMILIAR);
 		toSaved.setPermissao(EnumPermissao.AGRICULTOR_FAMILIAR);
 		
 		ProdutorDto response = service.toProdutorDto(toSaved);
