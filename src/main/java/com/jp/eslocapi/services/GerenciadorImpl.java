@@ -408,7 +408,6 @@ try {
 
 		if (atd == null) {
 			
-//			throw new BusinessException("Não houve registro, ocorreu um erro na validação das informações.");
 			throw new BusinessException("Não houve registro, ocorreu um erro na validação das informações.");
 		}
 		// define como null para evitar atualizaçoes que não sejam necessárias
