@@ -42,8 +42,8 @@ public class EslocApiApplication extends SpringBootServletInitializer {
 
 		@Override
 		public void run(String... args) throws Exception {
-			createServicesIfNotExists();
-			createDocumentTypeIfNotExists();
+//			createServicesIfNotExists();
+//			createDocumentTypeIfNotExists();
 
 		}
 

@@ -1,5 +1,6 @@
 package com.jp.eslocapi.api.services.impl;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,10 +13,14 @@ import com.jp.eslocapi.Configuration;
 import com.jp.eslocapi.api.dto.AtendimentoBasicDto;
 import com.jp.eslocapi.api.dto.AtendimentosBasicGetDto;
 import com.jp.eslocapi.api.entities.Atendimento;
+import com.jp.eslocapi.api.entities.Persona;
 import com.jp.eslocapi.api.repositories.AtendimentosRepository;
 import com.jp.eslocapi.api.services.AtendimentoService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class AtendimentoServiceImpl implements AtendimentoService{
 
 	@Autowired
@@ -64,6 +69,14 @@ public class AtendimentoServiceImpl implements AtendimentoService{
 				.emitiuDae(atendimento.getEmitiuDAE().toString())
 				.CodDoServico(atendimento.getTiposervico().getDescricaoTipo())
 				.build();
+	}
+
+	@Override
+	public List<AtendimentosBasicGetDto> meusLancamentosHoje( LocalDate inicio, LocalDate fim ) {
+		Persona emissor = new Persona();
+		emissor.setCpf("04459471604");
+		List<Atendimento> atd = this.repository.meusLancamentosHoje(emissor.getCpf(), inicio, fim);
+		return atd.stream().map(atendimento-> this.toAtendimentosBasicGetDto(atendimento)).collect(Collectors.toList());
 	}
 
 }

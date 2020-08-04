@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jp.eslocapi.api.dto.ProdutorDto;
+import com.jp.eslocapi.api.entities.EnumCategoria;
 import com.jp.eslocapi.api.entities.EnumPermissao;
-import com.jp.eslocapi.api.entities.EnumType;
 import com.jp.eslocapi.api.entities.Persona;
 import com.jp.eslocapi.api.services.ProdutorService;
 
@@ -61,9 +61,6 @@ public class ProdutorController {
 	public ProdutorDto getProdutor(@PathVariable Long id) {
 		
 		Persona toSaved = service.getById(id);
-		
-		toSaved.setCategoria(EnumType.AGRICULTOR_FAMILIAR);
-		toSaved.setPermissao(EnumPermissao.AGRICULTOR_FAMILIAR);
 		
 		ProdutorDto response = service.toProdutorDto(toSaved);
 		

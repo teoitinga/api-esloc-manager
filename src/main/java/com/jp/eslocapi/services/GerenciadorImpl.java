@@ -70,8 +70,11 @@ public class GerenciadorImpl implements Gerenciador {
 		//Define outras variaveis do atendimento pois depende de consultas externas
 		
 		
-		Persona emissor = null;
-		Persona responsavel = null;
+		Persona emissor = new Persona();
+		emissor.setCpf("04459471604");
+		
+		Persona responsavel = new Persona();
+		responsavel.setCpf("04459471604");
 		
 		// verifica se existe pelo menos um produtora atendido
 		log.info("Quantidade de produtores: {}", dto.getProdutorInfo().size());
@@ -106,10 +109,13 @@ public class GerenciadorImpl implements Gerenciador {
 		List<Persona> produtores = obtemProdutores(dto.getProdutorInfo());
 		log.info("Produtores configurados {}", produtores);
 		
+		//Define o emissor e responsável elo atendimento
+		atendimento.setEmissor(emissor.getCpf());
+		atendimento.setResponsavel(responsavel.getCpf());
+		
 		//registra atendimento para cada produtor da list
 		List<Atendimento> servicosPrestados;
 		
-		//servicosPrestados = criaAtendimentoParaProdutor(produtores, dto.getTipoServico(), atendimento);
 		servicosPrestados = obtemListaDeServicos(dto.getTipoServico(), atendimento);
 		
 		//percorre a lista de produrores
@@ -174,7 +180,10 @@ public class GerenciadorImpl implements Gerenciador {
 		
 		LocalDate dataAtendimento = atd.getDataAtendimento();
 		LocalDate dataConclusaoPrevista = dataAtendimento.plusDays(tipoDeServico.getTempoEstimado());
-		Persona emissor = atd.getEmissor();
+		
+		String emissor = atd.getEmissor();
+		String responsavel = atd.getResponsavel();
+		
 		// define DAE e ART
 		EnumYesNo emitiuDAE = EnumYesNo.NAO;
 
@@ -204,7 +213,6 @@ public class GerenciadorImpl implements Gerenciador {
 			valor = BigDecimal.ZERO;
 		}
 
-		Persona responsavel = atd.getResponsavel();
 		String observacoes = atd.getObservacoes();
 		String tarefaDescricao = servico.getDescricaoDoServico();
 		TipoServico tiposervico = tipoDeServico;
@@ -286,10 +294,10 @@ public class GerenciadorImpl implements Gerenciador {
 		
 		LocalDate dataAtendimento = atd.getDataAtendimento();
 		LocalDate dataConclusaoPrevista = dataAtendimento.plusDays(tipoDeServico.getTempoEstimado());
-		Persona emissor = atd.getEmissor();
+		String emissor = atd.getEmissor();
 		EnumYesNo emitiuART = atd.getEmitiuART();
 		EnumYesNo emitiuDAE = atd.getEmitiuDAE();
-		Persona responsavel = atd.getResponsavel();
+		String responsavel = atd.getResponsavel();
 		String observacoes = atd.getObservacoes();
 		String tarefaDescricao = servico.getDescricaoDoServico();
 		Persona produtor = atd.getProdutor();
@@ -403,8 +411,10 @@ try {
 				.emitiuDAE(atendimento.getEmitiuDAE())
 				.emitiuART(atendimento.getEmitiuART())
 				.dataConclusaoPrevista(atendimento.getDataConclusaoPrevista())
-				.statusTarefa(atendimento.getStatusTarefa()).emissor(atendimento.getEmissor())
-				.responsavel(atendimento.getResponsavel()).statusTarefa(EnumStatus.INICIADA).observacoes(obs)
+				.statusTarefa(atendimento.getStatusTarefa())
+				.emissor(atendimento.getEmissor())
+				.responsavel(atendimento.getResponsavel())
+				.statusTarefa(EnumStatus.INICIADA).observacoes(obs)
 				.produtor(prd).build();
 		log.info("Registrando atendimentos {}", atd);
 		atd = this.atendimentoService.save(atd);

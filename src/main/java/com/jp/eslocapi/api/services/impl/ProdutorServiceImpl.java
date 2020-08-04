@@ -12,6 +12,10 @@ import org.springframework.stereotype.Service;
 import com.jp.eslocapi.Configuration;
 import com.jp.eslocapi.api.dto.ProdutoPostMinDto;
 import com.jp.eslocapi.api.dto.ProdutorDto;
+import com.jp.eslocapi.api.entities.EnumCategoria;
+import com.jp.eslocapi.api.entities.EnumEscolaridade;
+import com.jp.eslocapi.api.entities.EnumGender;
+import com.jp.eslocapi.api.entities.EnumPermissao;
 import com.jp.eslocapi.api.entities.Persona;
 import com.jp.eslocapi.api.exceptions.ProdutorNotFound;
 import com.jp.eslocapi.api.repositories.ProdutorRepository;
@@ -73,9 +77,11 @@ public class ProdutorServiceImpl implements ProdutorService {
 	public Persona toProdutor(ProdutorDto produtorDto) {
 		String dataNascimento;
 		LocalDate localDateNascimento = null;
-		System.out.println("Nascimento: " + produtorDto.getDataNascimento().toString());
-		System.out.println("Formato: " + DATA_FORMAT_VIEW);
-
+		
+		//defini o usuario atual
+		Persona cadastrante = new Persona();
+		cadastrante.setCpf("04459471604");
+		
 		// tenta obter a data no segundo formato yyyy-MM-dd
 		try {
 			localDateNascimento = LocalDate.parse(produtorDto.getDataNascimento(),
@@ -106,6 +112,13 @@ public class ProdutorServiceImpl implements ProdutorService {
 				.cpf(produtorDto.getCpf())
 				.fone(produtorDto.getFone())
 				.dataNascimento(localDateNascimento)//LocalDate.parse(produtorDto.getDataNascimento()))//LocalDate.parse(produtorDto.getDataNascimento(), DateTimeFormatter.ofPattern(DATA_FORMAT_VIEW)))
+				.categoria(EnumCategoria.valueOf(produtorDto.getCategoria()))
+				.permissao(EnumPermissao.valueOf(produtorDto.getCategoria()))
+				.municipio(produtorDto.getMunicipio())
+				.endereco(produtorDto.getEndereco())
+				.cpfCadastrante(cadastrante.getCpf())
+				.sexo(EnumGender.valueOf(produtorDto.getSexo()))
+				.escolaridade(EnumEscolaridade.valueOf(produtorDto.getEscolaridade()))
 				.build();
 	}
 	

@@ -1,5 +1,6 @@
 package com.jp.eslocapi.api.resources;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -49,6 +50,13 @@ public class TarefaController {
 			@RequestParam(value = "size", defaultValue = "5") Integer size
 			) {
 		return this.atendimentoService.findAll(PageRequest.of(page, size));
+	}
+	@GetMapping("/meusLancamento/hoje")
+	@ResponseStatus(HttpStatus.OK)
+	public List<AtendimentosBasicGetDto> obtemAtendimentos() {
+		LocalDate inicio = LocalDate.now().minusDays(25);
+		LocalDate fim = LocalDate.now().plusDays(5);
+		return this.atendimentoService.meusLancamentosHoje(inicio, fim);
 	}
 
 }

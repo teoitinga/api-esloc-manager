@@ -41,11 +41,11 @@ public class Atendimento {
 	@NotNull(message = "Você deve informar o produtor que solicitou o serviço.")
 	private Persona produtor;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Persona responsavel;
+	@Column(name = "responsavel_cpf")
+	private String responsavel;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Persona emissor;
+	@Column(name = "emissor_cpf")
+	private String emissor;
 	
 	@Column
 	private String observacoes;

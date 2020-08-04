@@ -1,14 +1,7 @@
 package com.jp.eslocapi.api.entities;
 
-public enum EnumPermissao {
-	ADMIN,
-	COORDENADOR,
-	TECNICO,
-	PREFEITURA,
-	SINDICATO,
-	CEDIDO,
+public enum EnumCategoria {
 	AGRICULTOR_FAMILIAR,
-	CONVIDADO,
 	MEDIO_PRODUTOR,
 	AGRICULTOR_URBANO,
 	OUTROS
