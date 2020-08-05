@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jp.eslocapi.api.dto.ProdutorDto;
-import com.jp.eslocapi.api.entities.EnumCategoria;
-import com.jp.eslocapi.api.entities.EnumPermissao;
 import com.jp.eslocapi.api.entities.Persona;
 import com.jp.eslocapi.api.services.ProdutorService;
 
@@ -51,22 +49,8 @@ public class ProdutorController {
 		
 		return response;
 	}
-	@GetMapping("{id}")
-	@ResponseStatus(HttpStatus.OK)
-	@ApiOperation("Registra um novo produtor")
-	@ApiResponses({
-		@ApiResponse(code=200, message = ""),
-		@ApiResponse(code=404, message = "Produtor não registrado no banco de dados.")
-	})
-	public ProdutorDto getProdutor(@PathVariable Long id) {
-		
-		Persona toSaved = service.getById(id);
-		
-		ProdutorDto response = service.toProdutorDto(toSaved);
-		
-		return response;
-	}
-	@GetMapping("cpf/{cpf}")
+
+	@GetMapping("{cpf}")
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	@ApiOperation("Verifica se o produtor já existe e retorno os dados")
 	@ApiResponses({
@@ -81,19 +65,18 @@ public class ProdutorController {
 		return response;
 	}
 	
-	@DeleteMapping("{id}")
+	@DeleteMapping("{cpf}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@ApiOperation("Apaga registro de produtor pelo ID informado")
 	@ApiResponses({
 		@ApiResponse(code=204, message = "")
 	})
-	public void deleteProdutor(@PathVariable Long id) {
-		
-		Persona toDeleted= service.getById(id);
-		service.delete(toDeleted);
+	public void deleteProdutor(@PathVariable String cpf) {
+
+		service.delete(cpf);
 
 	}
-	@PutMapping("{id}")
+	@PutMapping("{cpf}")
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation("Atualiza registro de produtor pelo CPF informado")
 	@ApiResponses({

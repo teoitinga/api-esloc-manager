@@ -55,10 +55,8 @@ public class ProdutorServiceImpl implements ProdutorService {
 	}
 
 	@Override
-	public void delete(Persona toDeleted) {
-		if(this.repository.existsByCpf(toDeleted.getCpf())) {
-			throw new BusinessException("Este registro não existe.");
-		}
+	public void delete(String cpf) {
+		Persona toDeleted = this.getByCpf(cpf);
 		repository.delete(toDeleted);
 	}
 
@@ -106,19 +104,55 @@ public class ProdutorServiceImpl implements ProdutorService {
 			
 			// se deu erro nas 02 situações então a variável continua null
 			// se a variável é null, antão é setada com a data atual
-		}		
+		}
+		//tenta obter a categoria
+		EnumCategoria categoria;
+		try {
+			categoria = EnumCategoria.valueOf(produtorDto.getCategoria());
+
+		}catch( IllegalArgumentException ex) {
+			categoria = EnumCategoria.AGRICULTOR_FAMILIAR;
+			
+		}
+		//tenta obter a permissao
+		EnumPermissao permissao;
+		try {
+			permissao = EnumPermissao.valueOf(produtorDto.getCategoria());
+			
+		}catch( IllegalArgumentException ex) {
+			permissao = EnumPermissao.AGRICULTOR_FAMILIAR;
+			
+		}
+		//tenta obter o sexo
+		EnumGender sexo;
+		try {
+			sexo = EnumGender.valueOf(produtorDto.getSexo());
+			
+		}catch( IllegalArgumentException ex) {
+			sexo = EnumGender.NAO_INFORMADO;
+			
+		}
+		//tenta obter a escolaridade
+		EnumEscolaridade escolaridade;
+		try {
+			escolaridade = EnumEscolaridade.valueOf(produtorDto.getEscolaridade());
+			
+		}catch( IllegalArgumentException ex) {
+			escolaridade = EnumEscolaridade.NAO_INFORMADO;
+			
+		}
 		return Persona.builder()
 				.nome(produtorDto.getNome())
 				.cpf(produtorDto.getCpf())
 				.fone(produtorDto.getFone())
 				.dataNascimento(localDateNascimento)//LocalDate.parse(produtorDto.getDataNascimento()))//LocalDate.parse(produtorDto.getDataNascimento(), DateTimeFormatter.ofPattern(DATA_FORMAT_VIEW)))
-				.categoria(EnumCategoria.valueOf(produtorDto.getCategoria()))
-				.permissao(EnumPermissao.valueOf(produtorDto.getCategoria()))
+				.categoria(categoria)
+				.permissao(permissao)
 				.municipio(produtorDto.getMunicipio())
 				.endereco(produtorDto.getEndereco())
 				.cpfCadastrante(cadastrante.getCpf())
-				.sexo(EnumGender.valueOf(produtorDto.getSexo()))
-				.escolaridade(EnumEscolaridade.valueOf(produtorDto.getEscolaridade()))
+				.sexo(sexo)
+				.escolaridade(escolaridade)
 				.build();
 	}
 	
@@ -146,6 +180,11 @@ public class ProdutorServiceImpl implements ProdutorService {
 				.cpf(persona.getCpf())
 				.fone(persona.getFone())
 				.dataNascimento(dataDeNascimento)
+				.categoria(persona.getCategoria().toString())
+				.municipio(persona.getMunicipio())
+				.endereco(persona.getEndereco())
+				.sexo(persona.getSexo().toString())
+				.escolaridade(persona.getEscolaridade().toString())
 				.build();
 	}
 
@@ -186,6 +225,7 @@ public class ProdutorServiceImpl implements ProdutorService {
 	public Persona getProdutorByCpf(String cpf) {
 		return repository.findByCpf(cpf).orElseThrow(()-> new ProdutorNotFound());
 	}
+
 
 
 }

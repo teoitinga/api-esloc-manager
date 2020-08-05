@@ -1,5 +1,6 @@
 package com.jp.eslocapi.api.services.impl;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,10 +13,15 @@ import org.springframework.stereotype.Service;
 import com.jp.eslocapi.Configuration;
 import com.jp.eslocapi.api.dto.AtendimentoBasicDto;
 import com.jp.eslocapi.api.dto.AtendimentosBasicGetDto;
+import com.jp.eslocapi.api.dto.ValoresAtendimentoDto;
 import com.jp.eslocapi.api.entities.Atendimento;
+import com.jp.eslocapi.api.entities.EnumStatus;
 import com.jp.eslocapi.api.entities.Persona;
+import com.jp.eslocapi.api.exceptions.AtendimentoNotFound;
 import com.jp.eslocapi.api.repositories.AtendimentosRepository;
 import com.jp.eslocapi.api.services.AtendimentoService;
+import com.jp.eslocapi.api.services.ProdutorService;
+import com.jp.eslocapi.exceptions.BusinessException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,6 +34,9 @@ public class AtendimentoServiceImpl implements AtendimentoService{
 	
 	@Autowired
 	private Configuration dateFormat;
+
+	@Autowired
+	private ProdutorService personaService;
 	
 	@Override
 	public Atendimento save(Atendimento atendimento) {
@@ -75,8 +84,56 @@ public class AtendimentoServiceImpl implements AtendimentoService{
 	public List<AtendimentosBasicGetDto> meusLancamentosHoje( LocalDate inicio, LocalDate fim ) {
 		Persona emissor = new Persona();
 		emissor.setCpf("04459471604");
-		List<Atendimento> atd = this.repository.meusLancamentosHoje(emissor.getCpf(), inicio, fim);
+		List<Atendimento> atd = this.repository.meusLancamentosHoje(emissor.getCpf(), inicio, fim).orElseThrow(()->new AtendimentoNotFound());
 		return atd.stream().map(atendimento-> this.toAtendimentosBasicGetDto(atendimento)).collect(Collectors.toList());
+	}
+	@Override
+	public List<AtendimentosBasicGetDto> meusAtendimentos(String status, LocalDate inicio, LocalDate fim ) {
+		Persona emissor = new Persona();
+		emissor.setCpf("04459471604");
+		List<Atendimento> atd = this.repository.meusAtendimentos(status, emissor.getCpf()).orElseThrow(()->new AtendimentoNotFound());
+		return atd.stream().map(atendimento-> this.toAtendimentosBasicGetDto(atendimento)).collect(Collectors.toList());
+	}
+
+	@Override
+	public void updateStatusTarefa(Long id, String status) {
+		Atendimento atd = this.repository.findById(id).orElseThrow(()-> new AtendimentoNotFound());
+		
+		//verifica integridade da informação do status
+		try {
+			EnumStatus newStatus = EnumStatus.valueOf(status);
+			atd.setStatusTarefa(newStatus);
+			this.repository.save(atd);
+		} catch(Exception e) {
+			throw new BusinessException("Não foi possível atualizar o registro"); 
+		}
+		
+	}
+
+	@Override
+	public void updateResponsavelTarefa(Long id, String responsavel) {
+		Atendimento atd = this.repository.findById(id).orElseThrow(()-> new AtendimentoNotFound());
+		
+		Persona rsp = this.personaService.getByCpf(responsavel);
+		
+		atd.setResponsavel(rsp.getCpf());
+		
+		this.repository.save(atd);
+		
+	}
+
+	@Override
+	public void updateValoresTarefa(Long id, ValoresAtendimentoDto valores) {
+		Atendimento atd = this.repository.findById(id).orElseThrow(()-> new AtendimentoNotFound());
+
+		BigDecimal valorDoServico = valores.getValorDoServico();
+		BigDecimal valorCobrado= valores.getValorCobrado();
+		
+		atd.setValorDoServico(valorDoServico);
+		atd.setValorDoDae(valorCobrado);
+		
+		this.repository.save(atd);
+		
 	}
 
 }

@@ -81,10 +81,11 @@ public class Persona {
 	private EnumGender sexo;
 
 	@Column
+	@Enumerated(EnumType.STRING)
 	private EnumEscolaridade escolaridade;
 
 	@Column
-	private Integer coclusaoCadastro;
+	private Integer conclusaoCadastro;
 	
 	@PrePersist
 	public void setDataCadastro() {
@@ -98,7 +99,7 @@ public class Persona {
 		configConclusaoCadastro();
 	}
 	private void configConclusaoCadastro() {
-		int camposTotal = 0;
+		int camposTotal = 9;
 
 		int camposPreenchidos = 0;
 		
@@ -119,6 +120,6 @@ public class Persona {
 		}
 		camposTotal++;
 		
-		this.coclusaoCadastro = camposTotal-camposPreenchidos;
+		this.conclusaoCadastro = camposTotal-camposPreenchidos;
 	}
 }

@@ -5,6 +5,7 @@ public enum EnumEscolaridade {
 	ALFABETIZADO,
 	FUNDAMENTAL,
 	ENSINO_MEDIO,
-	SUPERIOR
+	SUPERIOR,
+	NAO_INFORMADO
 	
 }

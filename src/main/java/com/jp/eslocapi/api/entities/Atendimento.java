@@ -68,6 +68,9 @@ public class Atendimento {
 
 	@Column
 	private BigDecimal valorDoServico;
+
+	@Column
+	private BigDecimal valorDoDae;
 	
 	@Column
 	@Enumerated(EnumType.STRING)

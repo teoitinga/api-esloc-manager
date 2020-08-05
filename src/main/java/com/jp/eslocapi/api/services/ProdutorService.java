@@ -10,8 +10,6 @@ public interface ProdutorService {
 
 	Persona getById(Long id);
 
-	void delete(Persona toDeleted);
-
 	ProdutorDto update(ProdutorDto dto);
 
 	Persona toProdutor(ProdutorDto dto);
@@ -27,4 +25,6 @@ public interface ProdutorService {
 	Persona saveMin(ProdutoPostMinDto produtorMin);
 
 	Persona getProdutorByCpf(String cpf);
+
+	void delete(String cpf);
 }

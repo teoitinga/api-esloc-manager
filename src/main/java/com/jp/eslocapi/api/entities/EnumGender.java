@@ -2,5 +2,6 @@ package com.jp.eslocapi.api.entities;
 
 public enum EnumGender {
 	MASCULINO,
-	FEMININO
+	FEMININO,
+	NAO_INFORMADO
 }
