@@ -11,6 +11,8 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.jp.eslocapi.Configuration;
@@ -25,8 +27,8 @@ import com.jp.eslocapi.api.entities.Persona;
 import com.jp.eslocapi.api.entities.TipoServico;
 import com.jp.eslocapi.api.exceptions.ApiErrors;
 import com.jp.eslocapi.api.services.AtendimentoService;
+import com.jp.eslocapi.api.services.ProdutorService;
 import com.jp.eslocapi.api.services.TypeServiceService;
-import com.jp.eslocapi.api.services.impl.ProdutorServiceImpl;
 import com.jp.eslocapi.exceptions.BusinessException;
 import com.jp.eslocapi.util.FileUtil;
 import com.jp.eslocapi.util.exceptions.DoNotCreateFolder;
@@ -44,7 +46,7 @@ public class GerenciadorImpl implements Gerenciador {
 	private static String DATA_FORMAT_FOLDER;
 
 	@Autowired
-	private ProdutorServiceImpl produtorService;
+	private ProdutorService produtorService;
 
 	@Autowired
 	private TypeServiceService typeServiceService;
@@ -68,13 +70,10 @@ public class GerenciadorImpl implements Gerenciador {
 		// Testa consistência das informações
 		
 		//Define outras variaveis do atendimento pois depende de consultas externas
-		
-		
-		Persona emissor = new Persona();
-		emissor.setCpf("04459471604");
-		
-		Persona responsavel = new Persona();
-		responsavel.setCpf("04459471604");
+		//busca o usuario atual
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+		Persona emissor = produtorService.getByCpf(userDetails.getUsername());
 		
 		// verifica se existe pelo menos um produtora atendido
 		log.info("Quantidade de produtores: {}", dto.getProdutorInfo().size());
@@ -111,7 +110,6 @@ public class GerenciadorImpl implements Gerenciador {
 		
 		//Define o emissor e responsável elo atendimento
 		atendimento.setEmissor(emissor.getCpf());
-		atendimento.setResponsavel(responsavel.getCpf());
 		
 		//registra atendimento para cada produtor da list
 		List<Atendimento> servicosPrestados;

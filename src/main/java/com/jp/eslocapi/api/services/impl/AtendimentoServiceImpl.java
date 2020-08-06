@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.jp.eslocapi.Configuration;
@@ -82,16 +84,21 @@ public class AtendimentoServiceImpl implements AtendimentoService{
 
 	@Override
 	public List<AtendimentosBasicGetDto> meusLancamentosHoje( LocalDate inicio, LocalDate fim ) {
-		Persona emissor = new Persona();
-		emissor.setCpf("04459471604");
-		List<Atendimento> atd = this.repository.meusLancamentosHoje(emissor.getCpf(), inicio, fim).orElseThrow(()->new AtendimentoNotFound());
+		//busca o usuario atual
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+		Persona usuario = personaService.getByCpf(userDetails.getUsername());
+		List<Atendimento> atd = this.repository.meusLancamentosHoje(usuario.getCpf(), inicio, fim).orElseThrow(()->new AtendimentoNotFound());
 		return atd.stream().map(atendimento-> this.toAtendimentosBasicGetDto(atendimento)).collect(Collectors.toList());
 	}
 	@Override
 	public List<AtendimentosBasicGetDto> meusAtendimentos(String status, LocalDate inicio, LocalDate fim ) {
-		Persona emissor = new Persona();
-		emissor.setCpf("04459471604");
-		List<Atendimento> atd = this.repository.meusAtendimentos(status, emissor.getCpf()).orElseThrow(()->new AtendimentoNotFound());
+		//busca o usuario atual
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+		Persona usuario = personaService.getByCpf(userDetails.getUsername());
+		
+		List<Atendimento> atd = this.repository.meusAtendimentos(status, usuario.getCpf()).orElseThrow(()->new AtendimentoNotFound());
 		return atd.stream().map(atendimento-> this.toAtendimentosBasicGetDto(atendimento)).collect(Collectors.toList());
 	}
 
@@ -103,6 +110,13 @@ public class AtendimentoServiceImpl implements AtendimentoService{
 		try {
 			EnumStatus newStatus = EnumStatus.valueOf(status);
 			atd.setStatusTarefa(newStatus);
+			//busca o usuario atual
+			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+	                .getPrincipal();
+			Persona usuario = personaService.getByCpf(userDetails.getUsername());
+			
+			atd.setEmissor(usuario.getCpf());
+			
 			this.repository.save(atd);
 		} catch(Exception e) {
 			throw new BusinessException("Não foi possível atualizar o registro"); 
@@ -131,7 +145,13 @@ public class AtendimentoServiceImpl implements AtendimentoService{
 		
 		atd.setValorDoServico(valorDoServico);
 		atd.setValorDoDae(valorCobrado);
+		//busca o usuario atual
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+		Persona usuario = personaService.getByCpf(userDetails.getUsername());
 		
+		atd.setEmissor(usuario.getCpf());
+
 		this.repository.save(atd);
 		
 	}

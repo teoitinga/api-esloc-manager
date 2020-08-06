@@ -77,7 +77,7 @@ public class TarefaController {
 			) {
 		this.atendimentoService.updateResponsavelTarefa(id, cpf);
 	}
-	@PutMapping("/{id}/valores}")
+	@PutMapping("/{id}")
 	@ApiOperation("Modifica o valor do projeto e valor cobrado pelo serviço")
 	@ApiResponses({ @ApiResponse(code = 200, message = ""),
 		@ApiResponse(code = 404, message = "Nenhum atendimento encontrado.") })

@@ -22,6 +22,8 @@ public class TarefaPostDto {
 	private List<AtendimentoBasicDto> tipoServico;
 	
 	private String dataDoAtendimento;
+	
+	private String responsavel;
 
 	private String observacoes;
 }

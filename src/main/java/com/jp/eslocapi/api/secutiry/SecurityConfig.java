@@ -32,6 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.antMatchers("api/v1/tarefas/**").hasRole(EnumPermissao.ADMIN.toString())
 				.antMatchers("api/v1/produtores/**").hasRole(EnumPermissao.ADMIN.toString())
 				.antMatchers("api/v1/usuarios/**").permitAll()
+				.anyRequest().authenticated()
 			.and()
 			.httpBasic();
 
