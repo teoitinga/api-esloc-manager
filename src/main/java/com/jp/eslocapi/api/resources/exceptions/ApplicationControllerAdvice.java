@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.jp.eslocapi.api.exceptions.ApiErrors;
 import com.jp.eslocapi.api.exceptions.AtendimentoNotFound;
+import com.jp.eslocapi.api.exceptions.DocumentNotFoundException;
+import com.jp.eslocapi.api.exceptions.InvalidPasswordException;
 import com.jp.eslocapi.api.exceptions.ProdutorNotFound;
 import com.jp.eslocapi.api.exceptions.ServiceNotFound;
 import com.jp.eslocapi.exceptions.BusinessException;
@@ -55,9 +57,21 @@ public class ApplicationControllerAdvice {
 		return new ApiErrors("Nenhum atendimento encontrado.");
 	}
 	
+	@ExceptionHandler(InvalidPasswordException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ApiErrors handleInvalidPasswordException(InvalidPasswordException ex) {
+		
+		return new ApiErrors(ex.getMessage());
+	}
 	@ExceptionHandler(ServiceNotFound.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ApiErrors handleServiceNotFound(ServiceNotFound ex) {
+		
+		return new ApiErrors(ex.getMessage());
+	}
+	@ExceptionHandler(DocumentNotFoundException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ApiErrors handleDocumentNotFoundException(DocumentNotFoundException ex) {
 		
 		return new ApiErrors(ex.getMessage());
 	}

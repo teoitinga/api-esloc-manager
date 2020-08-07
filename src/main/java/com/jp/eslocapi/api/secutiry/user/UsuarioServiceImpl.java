@@ -10,9 +10,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.jp.eslocapi.api.dto.CredenciaisDto;
 import com.jp.eslocapi.api.dto.UserDto;
 import com.jp.eslocapi.api.entities.EnumPermissao;
 import com.jp.eslocapi.api.entities.Persona;
+import com.jp.eslocapi.api.exceptions.InvalidPasswordException;
 import com.jp.eslocapi.api.repositories.ProdutorRepository;
 import com.jp.eslocapi.api.secutiry.exceptions.UserNameNotFoundException;
 
@@ -63,6 +65,16 @@ public class UsuarioServiceImpl implements UserDetailsService{
 		toSaved.setPassword(senhaCriptografada);
 		
 		return this.repository.save(toSaved);
+	}
+
+	public UserDetails autenticar(CredenciaisDto usuario) {
+		UserDetails user = this.loadUserByUsername(usuario.getLogin());
+		boolean senhaEIgual = passwordEncoder.matches(usuario.getSenha(), user.getPassword());
+		if(senhaEIgual) {
+			return user;
+		}
+		throw new InvalidPasswordException();
+		
 	}
 
 }

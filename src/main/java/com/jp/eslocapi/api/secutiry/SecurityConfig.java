@@ -6,10 +6,15 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.jp.eslocapi.api.entities.EnumPermissao;
+import com.jp.eslocapi.api.secutiry.jwt.JwtAuthFilter;
+import com.jp.eslocapi.api.secutiry.jwt.JwtService;
 import com.jp.eslocapi.api.secutiry.user.UsuarioServiceImpl;
 
 @EnableWebSecurity
@@ -18,6 +23,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Autowired
 	UsuarioServiceImpl usuarioService;
+	
+	@Autowired
+	private JwtService jwtService;
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -32,12 +40,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.antMatchers("api/v1/tarefas/**").hasRole(EnumPermissao.ADMIN.toString())
 				.antMatchers("api/v1/produtores/**").hasRole(EnumPermissao.ADMIN.toString())
 				.antMatchers("api/v1/usuarios/**").permitAll()
-				.anyRequest().authenticated()
+
 			.and()
-			.httpBasic();
+			.sessionManagement()
+			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and()
+			.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
+			;
 
 	}
 
+	@Bean
+	public OncePerRequestFilter jwtFilter() {
+		return new JwtAuthFilter(jwtService, usuarioService);
+	}
+	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();

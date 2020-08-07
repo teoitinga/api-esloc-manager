@@ -44,13 +44,13 @@ public class JwtService {
 		
 						
 		return Jwts.builder()
-				//.setSubject(usuario.getCpf())
-				//.setExpiration(dataHoraExpira)
+				.setSubject(usuario.getCpf())
+				.setExpiration(dataHoraExpira)
 				.setClaims(claims)
 				.signWith(SignatureAlgorithm.HS512, this.chaveAssinatura)
 				.compact();
 	}
-	public Claims obterClaims(String token) throws ExpiredJwtException {
+	private Claims obterClaims(String token) throws ExpiredJwtException {
 		
 		return Jwts.parser()
 				.setSigningKey(this.chaveAssinatura)
@@ -58,19 +58,46 @@ public class JwtService {
 				.getBody();
 	}
 	public boolean tokenValido(String token) {
+		try {
+			Claims claims = this.obterClaims(token);
+
+			Date dataEpiracao = new Date(Long.parseLong(claims.get("expiration").toString()));
+			LocalDateTime data = dataEpiracao.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+			return !LocalDateTime.now().isAfter(data);
+		} catch( Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+	}
+	public String obterLoginUsuario(String token) throws ExpiredJwtException {
+		return (String) obterClaims(token).get("login");
+		
+	}
+	public String obterNomeUsuario(String token) throws ExpiredJwtException {
+		return (String) obterClaims(token).get("nome");
+		
+	}
+	public String obterRoleUsuario(String token) throws ExpiredJwtException {
+		return (String) obterClaims(token).get("role");
 		
 	}
 	//teste de geração do token
 	public static void main(String args[]) {
 		ConfigurableApplicationContext context = SpringApplication.run(EslocApiApplication.class);
-		JwtService jwt = context.getBean(JwtService.class);
+		JwtService service = context.getBean(JwtService.class);
 		
 		Persona usuario = Persona.builder()
 				.cpf("04459471604")
 				.permissao(EnumPermissao.TECNICO)
 				.nome("João Paulo")
 				.build();
-		String token = jwt.gerarToken(usuario);
+		String token = service.gerarToken(usuario);
 		System.out.println("Token: " + token);
+		
+		boolean isTokenValido = service.tokenValido(token);
+		System.out.println("Token válido: " + isTokenValido);
+		System.out.println("Token claims: " + service.obterClaims(token));
+		System.out.println("Token Usuário do token: " + service.obterLoginUsuario(token));
 	}
 }
