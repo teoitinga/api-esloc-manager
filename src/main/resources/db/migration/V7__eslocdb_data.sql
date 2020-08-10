@@ -4,7 +4,6 @@ VALUES
 ('03069742661',2,NULL,'2020-08-05 09:00:21.321000',NULL,NULL,NULL,'Maria da penha Santos\n'),
 ('03249194689',2,NULL,'2020-08-05 09:36:45.747000',NULL,NULL,NULL,' Aguinaldo Nunes Barbosa'),
 ('03674950669',1,NULL,'2020-07-29 14:56:14.363000',NULL,'999065029',NULL,'Gleison Rodrigues de Oliveira'),
-('04459471604',2,NULL,'2020-07-29 09:30:47.960000',NULL,NULL,NULL,'João Paulo Santana Gusmão'),
 ('04721404697',2,NULL,'2020-07-29 15:29:38.777000',NULL,NULL,NULL,'Welton Lino Moreira'),
 ('05819901614',2,NULL,'2020-07-29 15:29:38.859000',NULL,NULL,NULL,' Iracema Maria Moreira'),
 ('07730310732',2,NULL,'2020-07-29 10:04:39.223000',NULL,NULL,NULL,'Ailton Alves Moreira'),
@@ -29,6 +28,11 @@ VALUES
 ('81857918649',2,NULL,'2020-07-29 09:51:45.226000',NULL,NULL,NULL,'Sandra Helena Gomes Simão Cerqueira'),
 ('89942361634',2,NULL,'2020-07-29 15:35:28.445000',NULL,NULL,NULL,'Geraldo Daniel da Silva'),
 ('94361258600',2,NULL,'2020-08-05 09:30:45.066000',NULL,NULL,NULL,'Elio Lino Moreira');
+
+INSERT INTO `persona`(cpf, nome, data_cadastro, permissao, password) 
+VALUES 
+('09298188650','Sirlene Ferreira Peron','2020-08-09 14:27:43.298000','CEDIDO','$2a$10$zPBR1U.L31AEnnaGX4rml.GqSOMk/FtCVFDd2lKKYm5MhDE2K9RWW'),
+('04459471604','João Paulo Santana Gusmão','2020-08-09 14:27:43.298000','TECNICO','$2a$10$zPBR1U.L31AEnnaGX4rml.GqSOMk/FtCVFDd2lKKYm5MhDE2K9RWW');
 
 INSERT INTO `tipo_servico` VALUES ('AGCAD',NULL,'2020-07-29','Cadastro de uso insignificante',NULL,1,0.00),('AMIS',NULL,'2020-07-29','Interpretação de análise de solo',NULL,1,0.00),('AMSL',NULL,'2020-07-29','Envio de amostra de solo',NULL,10,25.00),('ATERBOV',NULL,NULL,'ATER - Bovinocultura',NULL,1,0.00),('ATERMA',NULL,NULL,'ATER - Meio ambiente',NULL,1,0.00),('CAD',NULL,'2020-07-29','Elaboração de limite de crédito para Sicoob',NULL,2,150.00),('CAR',NULL,'2020-07-29','Cadastro ambiental Rural - Emissão',NULL,2,200.00),('CAR2V',NULL,'2020-07-30','Cadastro ambiental Rural - 2a via',NULL,1,0.00),('CARRET',NULL,'2020-07-30','Cadastro ambiental Rural - Retificação',NULL,2,200.00),('CRCBBAF',NULL,'2020-07-30','Banco do Brasil - Pronaf - Custeio - Elaboração de projeto de crédito rural custeio',NULL,7,150.00),('CRCBBMP',NULL,'2020-07-30','Banco do Brasil - Pronamp - Elaboração de projeto de crédito rural custeio',NULL,7,150.00),('CRCSBB',NULL,'2020-07-29','Banco do Brasil - Elaboração de projeto de crédito rural custeio',NULL,7,150.00),('CRCSSC',NULL,'2020-07-29','Sicoob - Elaboração de projeto de crédito rural custeio',NULL,7,150.00),('CRIBBAF',NULL,'2020-07-30','Banco do Brasil - Pronaf - Elaboração de projeto de crédito rural investimento',NULL,7,150.00),('CRICBBMP',NULL,'2020-07-30','Banco do Brasil - Pronmp - Elaboração de projeto de crédito rural investimento',NULL,7,150.00),('CRINBB',NULL,'2020-07-29','Banco do Brasil - Elaboração de projeto de crédito rural investimento',NULL,7,150.00),('CRINSC',NULL,'2020-07-29','Sicoob - Elaboração de projeto de crédito rural invstimento',NULL,7,150.00),('CRMABB',NULL,NULL,'Credito Rural Moderagro - Banco do Brasil',NULL,7,150.00),('DAP',NULL,'2020-07-29','DAP - Emissão de Declaração de aptidão ao pronaf',NULL,2,0.00),('DAPCS',NULL,'2020-07-30','DAP - Consulta irregularidade em acesso a DAP',NULL,1,0.00),('DAPDS',NULL,'2020-07-30','DAP - Solicitação de desbloqueio de DAP',NULL,1,0.00),('GLB',NULL,'2020-07-29','Gleba - elaboração de Geo referenciamento',NULL,2,50.00),('LM',NULL,'2020-07-29','Elaboração de limite de crédito para Banco do Brasil',NULL,2,150.00),('PAA',NULL,'2020-07-29','PAA - Elaboração de projeto',NULL,7,0.00),('PAAATER',NULL,'2020-08-04','PAA - Orientações',NULL,1,0.00),('PNAE',NULL,'2020-07-29','PNAE - Elaboração de projeto',NULL,7,0.00),('PNAEATER',NULL,'2020-08-04','PNAE - Orientações',NULL,1,0.00);
 
