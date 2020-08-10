@@ -8,14 +8,18 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException.Forbidden;
 
 import com.jp.eslocapi.api.exceptions.ApiErrors;
 import com.jp.eslocapi.api.exceptions.AtendimentoNotFound;
 import com.jp.eslocapi.api.exceptions.DocumentNotFoundException;
 import com.jp.eslocapi.api.exceptions.InvalidPasswordException;
+import com.jp.eslocapi.api.exceptions.MetaNotUniqueException;
 import com.jp.eslocapi.api.exceptions.ProdutorNotFound;
 import com.jp.eslocapi.api.exceptions.ServiceNotFound;
+import com.jp.eslocapi.api.secutiry.exceptions.UserNameNotFoundException;
 import com.jp.eslocapi.exceptions.BusinessException;
+import com.jp.eslocapi.util.exceptions.FolderNotFoundException;
 
 @RestControllerAdvice
 public class ApplicationControllerAdvice {
@@ -29,11 +33,36 @@ public class ApplicationControllerAdvice {
 		return new ApiErrors(resultErrors);
 	}
 
+	@ExceptionHandler(UserNameNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ApiErrors handleUserNameNotFoundException(BusinessException ex) {
+		
+		return new ApiErrors(ex.getMessage());
+	}
+	@ExceptionHandler(FolderNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ApiErrors handleFolderNotFoundException(FolderNotFoundException ex) {
+		
+		return new ApiErrors(ex.getMessage());
+	}
+	@ExceptionHandler(MetaNotUniqueException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ApiErrors handleMetaNotUniqueException(MetaNotUniqueException ex) {
+		
+		return new ApiErrors(ex.getMessage());
+	}
 	@ExceptionHandler(BusinessException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ApiErrors handleBusinessException(BusinessException ex) {
 		
 		return new ApiErrors(ex);
+	}
+
+	@ExceptionHandler(Forbidden.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ApiErrors handleAccessDeniedException (Forbidden ex) {
+		
+		return new ApiErrors(ex.getMessage());
 	}
 	
 	@ExceptionHandler(ProdutorNotFound.class)
@@ -42,12 +71,12 @@ public class ApplicationControllerAdvice {
 		
 		return new ApiErrors(ex);
 	}
-	
+
 	@ExceptionHandler(ConstraintViolationException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ApiErrors handleProdutorNotFound(ConstraintViolationException ex) {
+	public ApiErrors handleConstraintViolationException(ConstraintViolationException ex) {
 		
-		return new ApiErrors("CPF informado não é válido!");
+		return new ApiErrors(ex.getMessage());
 	}
 	
 	@ExceptionHandler(AtendimentoNotFound.class)

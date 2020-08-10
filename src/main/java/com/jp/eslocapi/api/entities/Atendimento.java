@@ -17,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -67,9 +68,11 @@ public class Atendimento {
 	private TipoServico tiposervico;
 
 	@Column
+	@Digits(integer=6, fraction=2)
 	private BigDecimal valorDoServico;
 
 	@Column
+	@Digits(integer=6, fraction=2)
 	private BigDecimal valorDoDae;
 	
 	@Column

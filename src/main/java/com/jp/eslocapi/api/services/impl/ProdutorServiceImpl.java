@@ -120,7 +120,7 @@ public class ProdutorServiceImpl implements ProdutorService {
 			permissao = EnumPermissao.valueOf(produtorDto.getCategoria());
 			
 		}catch( IllegalArgumentException ex) {
-			permissao = EnumPermissao.AGRICULTOR_FAMILIAR;
+			permissao = EnumPermissao.PRODUTOR;
 			
 		}
 		//tenta obter o sexo
@@ -175,16 +175,39 @@ public class ProdutorServiceImpl implements ProdutorService {
 			
 		}
 		
+		String categoria = null;
+		try {
+			categoria = persona.getCategoria().toString();
+			
+		}catch(NullPointerException ex) {
+			
+		}
+		String sexo = null;
+		try {
+			sexo = persona.getSexo().toString();
+			
+		}catch(NullPointerException ex) {
+			
+		}
+		String escolaridade = null;
+		try {
+
+			escolaridade = persona.getEscolaridade().toString();
+			
+		}catch(NullPointerException ex) {
+			
+		}
+		
 		return ProdutorDto.builder()
 				.nome(persona.getNome())
 				.cpf(persona.getCpf())
 				.fone(persona.getFone())
 				.dataNascimento(dataDeNascimento)
-				.categoria(persona.getCategoria().toString())
+				.categoria(categoria)
 				.municipio(persona.getMunicipio())
 				.endereco(persona.getEndereco())
-				.sexo(persona.getSexo().toString())
-				.escolaridade(persona.getEscolaridade().toString())
+				.sexo(sexo)
+				.escolaridade(escolaridade)
 				.build();
 	}
 

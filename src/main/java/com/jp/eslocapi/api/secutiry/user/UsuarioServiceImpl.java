@@ -17,6 +17,7 @@ import com.jp.eslocapi.api.entities.Persona;
 import com.jp.eslocapi.api.exceptions.InvalidPasswordException;
 import com.jp.eslocapi.api.repositories.ProdutorRepository;
 import com.jp.eslocapi.api.secutiry.exceptions.UserNameNotFoundException;
+import com.jp.eslocapi.exceptions.BusinessException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -43,11 +44,19 @@ public class UsuarioServiceImpl implements UserDetailsService{
 	}
 
 	public Persona toPersona(UserDto dto) {
+		EnumPermissao permissao = EnumPermissao.CONVIDADO;
+		
+		try {
+			permissao = EnumPermissao.valueOf(dto.getRole());
+			
+		}catch(IllegalArgumentException ex) {
+			
+		}
 		return Persona.builder()
 				.nome(dto.getNome())
 				.cpf(dto.getLogin())
 				.password(dto.getPassword())
-				.permissao(EnumPermissao.valueOf(dto.getRole()))
+				.permissao(permissao)
 				.build();
 	}
 
@@ -63,7 +72,9 @@ public class UsuarioServiceImpl implements UserDetailsService{
 	public Persona save(Persona toSaved) {
 		String senhaCriptografada = passwordEncoder.encode(toSaved.getPassword());
 		toSaved.setPassword(senhaCriptografada);
-		
+		if(this.repository.existsByCpf(toSaved.getCpf())) {
+			throw new BusinessException("Já existe um registro com este cpf.");
+		}		
 		return this.repository.save(toSaved);
 	}
 

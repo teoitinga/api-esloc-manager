@@ -1,3 +1,17 @@
+-- MySQL dump 10.13  Distrib 8.0.16, for Win64 (x86_64)
+--
+-- Host: localhost    Database: eslocdb
+-- ------------------------------------------------------
+-- Server version	8.0.16
+
+
+--
+-- Table structure for table `persona`
+--
+
+DROP TABLE IF EXISTS `persona`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
 CREATE TABLE `persona` (
   `id` bigint(20) DEFAULT NULL,
   `cpf` varchar(12) NOT NULL,
@@ -17,3 +31,6 @@ CREATE TABLE `persona` (
   `conclusao_cadastro` int(2) DEFAULT NULL,
   PRIMARY KEY (`cpf`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+

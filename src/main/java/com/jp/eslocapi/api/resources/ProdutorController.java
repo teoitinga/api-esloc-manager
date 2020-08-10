@@ -51,14 +51,15 @@ public class ProdutorController {
 	}
 
 	@GetMapping("{cpf}")
-	@ResponseStatus(HttpStatus.ACCEPTED)
+	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation("Verifica se o produtor já existe e retorno os dados")
 	@ApiResponses({
-		@ApiResponse(code=202, message = "")
+		@ApiResponse(code=200, message = ""),
+		@ApiResponse(code=404, message = "CPF não registrado no banco de dados.")
 	})
 	public ProdutorDto getFindByCpf(@PathVariable String cpf) {
 		
-		Persona toSaved = service.whatIsCpf(cpf);
+		Persona toSaved = service.getByCpf(cpf);
 		
 		ProdutorDto response = service.toProdutorDto(toSaved);
 		

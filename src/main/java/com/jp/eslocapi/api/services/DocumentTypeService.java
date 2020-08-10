@@ -2,6 +2,8 @@ package com.jp.eslocapi.api.services;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.jp.eslocapi.api.entities.DocumentType;
 
 public interface DocumentTypeService {
@@ -15,5 +17,7 @@ public interface DocumentTypeService {
 	boolean isContaining();
 
 	void deleteAll();
+
+	void sendFile(MultipartFile documento, String documentoTipo, String idTarefa);
 
 }

@@ -15,6 +15,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.jp.eslocapi.api.secutiry.user.UsuarioServiceImpl;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class JwtAuthFilter extends OncePerRequestFilter{
 
 	private JwtService jwtService;
@@ -31,7 +34,8 @@ public class JwtAuthFilter extends OncePerRequestFilter{
 			throws ServletException, IOException {
 		String authorization = request.getHeader("Authorization");
 		if(authorization!=null && authorization.startsWith("Bearer")) {
-			String token = authorization.split("")[1];
+			String token = authorization.split(" ")[1];
+
 			boolean isValid = this.jwtService.tokenValido(token);
 			
 			if(isValid) {

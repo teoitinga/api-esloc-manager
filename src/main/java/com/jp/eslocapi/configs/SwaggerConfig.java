@@ -1,5 +1,9 @@
 package com.jp.eslocapi.configs;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -9,8 +13,12 @@ import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
+import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.Contact;
+import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -26,6 +34,8 @@ public class SwaggerConfig implements WebMvcConfigurer {
 					.apis(RequestHandlerSelectors.basePackage("com.jp.eslocapi.api.resources"))
 					.paths(PathSelectors.any())
 					.build()
+					.securityContexts(Arrays.asList(securityContext()))
+					.securitySchemes(Arrays.asList(apiKey()))
 					.apiInfo(apiInfo())
 					;
 	}
@@ -53,5 +63,25 @@ public class SwaggerConfig implements WebMvcConfigurer {
         registry
                 .addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
+    public ApiKey apiKey() {
+    	return new ApiKey("JWT", "Authorization", "header");
+    }
+    
+    public List<SecurityReference> defaultAuth(){
+    	AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverythinga");
+    	
+    	AuthorizationScope[] scopes = new AuthorizationScope[1];
+    	scopes[0] = authorizationScope;
+    	SecurityReference reference = new SecurityReference("JWT", scopes);
+    	List<SecurityReference> auths = new ArrayList<>();
+    	auths.add(reference);
+    	return auths;
+    }
+    private SecurityContext securityContext() {
+    	return SecurityContext.builder()
+    			.securityReferences(defaultAuth())
+    			.forPaths(PathSelectors.any())
+    			.build();
     }
 }

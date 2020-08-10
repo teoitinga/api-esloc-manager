@@ -1,3 +1,16 @@
+-- MySQL dump 10.13  Distrib 8.0.16, for Win64 (x86_64)
+--
+-- Host: localhost    Database: eslocdb
+-- ------------------------------------------------------
+-- Server version	8.0.16
+
+--
+-- Table structure for table `atendimento`
+--
+
+DROP TABLE IF EXISTS `atendimento`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
 CREATE TABLE `atendimento` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `data_atualizacao` datetime(6) DEFAULT NULL,
@@ -28,3 +41,4 @@ CREATE TABLE `atendimento` (
   CONSTRAINT `FKq396gkcu6rpk42av549cm7vdl` FOREIGN KEY (`emissor_cpf`) REFERENCES `persona` (`cpf`),
   CONSTRAINT `FKrt9fvw5orr2mw8opf26yad5f6` FOREIGN KEY (`produtor_cpf`) REFERENCES `persona` (`cpf`)
 ) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+

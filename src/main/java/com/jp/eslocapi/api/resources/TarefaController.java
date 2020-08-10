@@ -44,7 +44,7 @@ public class TarefaController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public void create( @RequestBody @Valid TarefaPostDto dto) {
-		log.info("Recebindo: {}",dto.getProdutorInfo());
+
 		this.gerenciador.buildTarefa(dto);
 		
 	}
@@ -82,7 +82,7 @@ public class TarefaController {
 	@ApiResponses({ @ApiResponse(code = 200, message = ""),
 		@ApiResponse(code = 404, message = "Nenhum atendimento encontrado.") })
 	@ResponseStatus(HttpStatus.OK)
-	public void alteraResponsavelTarefa(
+	public void alteraValoresTarefa(
 			@RequestParam Long id, @RequestBody ValoresAtendimentoDto valores
 			) {
 		this.atendimentoService.updateValoresTarefa(id, valores);
@@ -113,6 +113,21 @@ public class TarefaController {
 		LocalDate fim = LocalDate.now().plusDays(1);
 		
 		return this.atendimentoService.meusAtendimentos(status, inicio, fim);
+	}
+	@GetMapping("/meus-arquivos/{idAtendimento}")
+	@ApiOperation("Obtem os arquivos na pasta do atendimento selecionado")
+	@ApiResponses({ @ApiResponse(code = 200, message = "Documentos encontrados"),
+		@ApiResponse(code = 404, message = "Nenhum documento encontrado") })
+	@ResponseStatus(HttpStatus.OK)
+	public String obtemDocumentos(
+			@RequestParam Long idAtendimento
+			) {
+		
+		LocalDate inicio = LocalDate.now().minusDays(1);
+		LocalDate fim = LocalDate.now().plusDays(1);
+		
+		String pasta = this.atendimentoService.obtemPastaDoAtendimento(idAtendimento);
+		return pasta;
 	}
 
 }

@@ -1,3 +1,16 @@
+-- MySQL dump 10.13  Distrib 8.0.16, for Win64 (x86_64)
+--
+-- Host: localhost    Database: eslocdb
+-- ------------------------------------------------------
+-- Server version	8.0.16
+
+--
+-- Table structure for table `tipo_servico`
+--
+
+DROP TABLE IF EXISTS `tipo_servico`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
 CREATE TABLE `tipo_servico` (
   `tipo` varchar(255) NOT NULL,
   `data_atualizacao` date DEFAULT NULL,

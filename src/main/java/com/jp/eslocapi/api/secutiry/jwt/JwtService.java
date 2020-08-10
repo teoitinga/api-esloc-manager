@@ -19,8 +19,10 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class JwtService {
 	
 	@Value("${security.jwt.expiracao}")
@@ -31,6 +33,7 @@ public class JwtService {
 	
 
 	public String gerarToken(Persona usuario) {
+		log.info("Gerando token para usuario: {}", usuario);
 		long expira = Long.parseLong(expiracao);
 		LocalDateTime dataHoraExpiracao = LocalDateTime.now().plusMinutes(expira);
 		Instant instant = dataHoraExpiracao.atZone(ZoneId.systemDefault()).toInstant();
@@ -44,18 +47,21 @@ public class JwtService {
 		
 						
 		return Jwts.builder()
+				.setClaims(claims)
 				.setSubject(usuario.getCpf())
 				.setExpiration(dataHoraExpira)
-				.setClaims(claims)
 				.signWith(SignatureAlgorithm.HS512, this.chaveAssinatura)
 				.compact();
 	}
 	private Claims obterClaims(String token) throws ExpiredJwtException {
-		
-		return Jwts.parser()
-				.setSigningKey(this.chaveAssinatura)
-				.parseClaimsJws(token)
-				.getBody();
+		try {
+			return Jwts.parser()
+					.setSigningKey(this.chaveAssinatura)
+					.parseClaimsJws(token)
+					.getBody();
+		} catch(io.jsonwebtoken.MalformedJwtException exc) {
+			return null;
+		}
 	}
 	public boolean tokenValido(String token) {
 		try {
@@ -66,7 +72,6 @@ public class JwtService {
 
 			return !LocalDateTime.now().isAfter(data);
 		} catch( Exception ex) {
-			ex.printStackTrace();
 			return false;
 		}
 	}

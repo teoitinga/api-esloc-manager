@@ -25,4 +25,8 @@ public interface AtendimentoService {
 
 	List<AtendimentosBasicGetDto> meusAtendimentos(String status, LocalDate inicio, LocalDate fim);
 
+	String obtemPastaDoAtendimento(Long idAtendimento);
+
+	Atendimento findById(String idTarefa);
+
 }

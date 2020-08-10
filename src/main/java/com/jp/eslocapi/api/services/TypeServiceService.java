@@ -17,4 +17,6 @@ public interface TypeServiceService {
 	boolean isContaining();
 
 	void deleteAll();
+
+	ServicoDto create(ServicoDto dto);
 }

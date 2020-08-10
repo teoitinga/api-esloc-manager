@@ -75,6 +75,8 @@ public class GerenciadorImpl implements Gerenciador {
                 .getPrincipal();
 		Persona emissor = produtorService.getByCpf(userDetails.getUsername());
 		
+		Persona responsavel = produtorService.getByCpf(dto.getResponsavel());
+		
 		// verifica se existe pelo menos um produtora atendido
 		log.info("Quantidade de produtores: {}", dto.getProdutorInfo().size());
 
@@ -108,8 +110,11 @@ public class GerenciadorImpl implements Gerenciador {
 		List<Persona> produtores = obtemProdutores(dto.getProdutorInfo());
 		log.info("Produtores configurados {}", produtores);
 		
-		//Define o emissor e responsável elo atendimento
+		//Define o emissor pelo atendimento
 		atendimento.setEmissor(emissor.getCpf());
+		
+		//Define o responsável pelo atendimento
+		atendimento.setResponsavel(responsavel.getCpf());
 		
 		//registra atendimento para cada produtor da list
 		List<Atendimento> servicosPrestados;
@@ -414,8 +419,8 @@ try {
 				.responsavel(atendimento.getResponsavel())
 				.statusTarefa(EnumStatus.INICIADA).observacoes(obs)
 				.produtor(prd).build();
-		log.info("Registrando atendimentos {}", atd);
 		atd = this.atendimentoService.save(atd);
+
 		log.info("Atendimento registrado {}", atd);
 
 		if (atd == null) {

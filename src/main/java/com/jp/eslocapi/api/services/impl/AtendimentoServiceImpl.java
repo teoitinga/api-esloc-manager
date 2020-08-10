@@ -24,6 +24,7 @@ import com.jp.eslocapi.api.repositories.AtendimentosRepository;
 import com.jp.eslocapi.api.services.AtendimentoService;
 import com.jp.eslocapi.api.services.ProdutorService;
 import com.jp.eslocapi.exceptions.BusinessException;
+import com.jp.eslocapi.util.FileUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,6 +40,9 @@ public class AtendimentoServiceImpl implements AtendimentoService{
 
 	@Autowired
 	private ProdutorService personaService;
+	
+	@Autowired
+	FileUtil fileUtil;
 	
 	@Override
 	public Atendimento save(Atendimento atendimento) {
@@ -154,6 +158,21 @@ public class AtendimentoServiceImpl implements AtendimentoService{
 
 		this.repository.save(atd);
 		
+	}
+
+	@Override
+	public String obtemPastaDoAtendimento(Long idAtendimento) {
+		
+		Atendimento atd = this.repository.findById(idAtendimento).orElseThrow(()->new AtendimentoNotFound());
+		
+		return this.fileUtil.findFolder(atd );
+	}
+
+	@Override
+	public Atendimento findById(String idTarefa) {
+
+		return this.repository.findById(Long.valueOf(idTarefa)).orElseThrow(()->new AtendimentoNotFound());
+
 	}
 
 }
