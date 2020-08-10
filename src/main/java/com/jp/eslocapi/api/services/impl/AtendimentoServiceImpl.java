@@ -65,6 +65,10 @@ public class AtendimentoServiceImpl implements AtendimentoService{
 		return AtendimentoBasicDto.builder()
 				.descricaoDoServico(atendimento.getTarefaDescricao())
 				.CodDoServico(atendimento.getTiposervico().getDescricaoTipo())
+				.valorDoDae(atendimento.getValorDoDae().toString())
+				.valorDoServico(atendimento.getValorDoServico().toString())
+				.emitiuArt(atendimento.getEmitiuART().toString())
+				.emitiuDae(atendimento.getEmitiuDAE().toString())
 				.build();
 	}
 	private AtendimentosBasicGetDto toAtendimentosBasicGetDto(Atendimento atendimento) {
@@ -74,6 +78,21 @@ public class AtendimentoServiceImpl implements AtendimentoService{
 		}catch (NullPointerException e) {
 			dataDoAtendimento = null;
 		}
+		
+
+		String valorDAE = null;
+		try {
+			valorDAE = atendimento.getValorDoDae().toString();
+		}catch(NullPointerException ex) {
+			valorDAE = BigDecimal.ZERO.toString();
+		}
+		String valorServico = null;
+		try {
+			valorServico = atendimento.getValorDoServico().toString();
+		}catch(NullPointerException ex) {
+			valorServico = BigDecimal.ZERO.toString();
+		}
+		
 		return AtendimentosBasicGetDto.builder()
 				.id(String.valueOf(atendimento.getId()))
 				.dataDoAtendimento(dataDoAtendimento )
@@ -82,7 +101,9 @@ public class AtendimentoServiceImpl implements AtendimentoService{
 				.observacao(atendimento.getObservacoes())
 				.emitiuArt(atendimento.getEmitiuART().toString())
 				.emitiuDae(atendimento.getEmitiuDAE().toString())
-				.CodDoServico(atendimento.getTiposervico().getDescricaoTipo())
+				.servico(atendimento.getTiposervico().getDescricaoTipo())
+				.valorDae(valorDAE)
+				.valorServico(valorServico)
 				.build();
 	}
 

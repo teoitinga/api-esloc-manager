@@ -14,6 +14,7 @@ public class AtendimentoBasicDto {
 	private String CodDoServico;
 	private String descricaoDoServico;
 	private String valorDoServico;
+	private String valorDoDae;
 	private String emitiuDae;
 	private String emitiuArt;
 

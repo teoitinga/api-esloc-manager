@@ -13,10 +13,12 @@ public class AtendimentosBasicGetDto {
 	private String id;
 	private String produtor;
 	private String dataDoAtendimento;
-	private String CodDoServico;
+	private String servico;
 	private String descricaoDoServico;
 	private String emitiuDae;
 	private String emitiuArt;
 	private String observacao;
+	private String valorDae;
+	private String valorServico;
 
 }

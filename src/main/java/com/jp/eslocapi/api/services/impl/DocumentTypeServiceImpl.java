@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.jp.eslocapi.Configuration;
+import com.jp.eslocapi.api.dto.DocumentTypeDto;
 import com.jp.eslocapi.api.entities.ArquivosEnviados;
 import com.jp.eslocapi.api.entities.Atendimento;
 import com.jp.eslocapi.api.entities.DocumentType;
@@ -24,6 +26,7 @@ import com.jp.eslocapi.api.services.ArquivoEnviadoService;
 import com.jp.eslocapi.api.services.AtendimentoService;
 import com.jp.eslocapi.api.services.DocumentTypeService;
 import com.jp.eslocapi.api.services.ProdutorService;
+import com.jp.eslocapi.exceptions.BusinessException;
 import com.jp.eslocapi.util.FileUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -120,6 +123,33 @@ public class DocumentTypeServiceImpl implements DocumentTypeService{
 				.tipoDocumento(document.getAbreviatura())
 				.build();
 		this.arquivoEnviadoService.registra(registro);
+	}
+
+	@Override
+	public DocumentTypeDto create(DocumentTypeDto dto) {
+		//verifica se já existe esta abreviatura
+		Optional<DocumentType> tipoVerfify = this.repository.findByAbreviatura(dto.getAbreviatura());
+		
+		if(tipoVerfify.isPresent()) {
+		
+			throw new BusinessException("A abreviatura do documento informado já existe ");
+			
+		}
+		
+		DocumentType tipo = DocumentType.builder()
+				.abreviatura(dto.getAbreviatura())
+				.descricao(dto.getDescricao())
+				.informacoes(dto.getInformacoes())
+				.build();
+		return this.toDto(this.repository.save(tipo));
+	}
+
+	private DocumentTypeDto toDto(DocumentType document) {
+		return DocumentTypeDto.builder()
+				.abreviatura(document.getAbreviatura())
+				.descricao(document.getDescricao())
+				.informacoes(document.getInformacoes())
+				.build();
 	}
 	
 

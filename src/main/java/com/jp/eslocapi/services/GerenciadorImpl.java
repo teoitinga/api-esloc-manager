@@ -78,20 +78,17 @@ public class GerenciadorImpl implements Gerenciador {
 		Persona responsavel = produtorService.getByCpf(dto.getResponsavel());
 		
 		// verifica se existe pelo menos um produtora atendido
-		log.info("Quantidade de produtores: {}", dto.getProdutorInfo().size());
 
 		if (dto.getProdutorInfo() == null || dto.getProdutorInfo().size() == 0) {
 			new ApiErrors("Não é possível registrar atendimento sem informar o produtor");
 		}
-		log.info("Produtores...OK!");
+
 
 		// verifica se existe pelo menos um atendimento
-		log.info("Quantidade de serviços: {}", dto.getTipoServico().size());
+
 		if (dto.getTipoServico() == null || dto.getTipoServico().size() == 0) {
 			new ApiErrors("Não é possível registrar atendimento sem informar o serviço prestado");
 		}
-
-		log.info("Quantidade de serviços...OK!");
 
 		// verifica se a data é válida
 		LocalDate dataDoAtendimento = getDateValid(dto);
@@ -108,7 +105,6 @@ public class GerenciadorImpl implements Gerenciador {
 		// obtem a lista de pessoal atendido
 		// Para cada produtor sera gerada uma tarefa com os dados informados
 		List<Persona> produtores = obtemProdutores(dto.getProdutorInfo());
-		log.info("Produtores configurados {}", produtores);
 		
 		//Define o emissor pelo atendimento
 		atendimento.setEmissor(emissor.getCpf());
@@ -170,7 +166,7 @@ public class GerenciadorImpl implements Gerenciador {
 	private void criarAtendimento(Atendimento servico, Persona produtor) {
 		servico.setProdutor(produtor);
 		//salva o atendimento
-		log.info("Salvando atendimentos de {}", servico.getProdutor().getNome());
+		log.info("Registrando atendimentos do produtor: {}", servico.getProdutor().getNome());
 	}
 	//retorna a lista de atendimentos, porém o produtor ainda não está configurado
 	private List<Atendimento> obtemListaDeServicos(List<AtendimentoBasicDto> servico, Atendimento atd) {
@@ -204,6 +200,7 @@ public class GerenciadorImpl implements Gerenciador {
 		} catch (Exception e) {
 
 		}
+		
 		// define o valor do serviço
 		BigDecimal valor;
 
@@ -214,6 +211,18 @@ public class GerenciadorImpl implements Gerenciador {
 			valor = BigDecimal.ZERO;
 		} catch (NullPointerException e ) {
 			valor = BigDecimal.ZERO;
+		}
+		
+		// define o valor do Dae
+		BigDecimal valorDae;
+		
+		try {
+			valorDae = new BigDecimal(servico.getValorDoDae());
+			
+		} catch (java.lang.NumberFormatException e) {
+			valorDae = BigDecimal.ZERO;
+		} catch (NullPointerException e ) {
+			valorDae = BigDecimal.ZERO;
 		}
 
 		String observacoes = atd.getObservacoes();
@@ -231,15 +240,13 @@ public class GerenciadorImpl implements Gerenciador {
 				.tarefaDescricao(tarefaDescricao)
 				.tiposervico(tiposervico)
 				.valorDoServico(valor)
+				.valorDoDae(valorDae)
 				.observacoes(observacoes)
 				.build();
 	}
 
 	// verifica se a data é válida
 	private LocalDate getDateValid(TarefaPostDto dto) {
-		
-		log.info("Data informada: {}", dto.getDataDoAtendimento());
-		String cep = "\\d\\d\\d\\d\\d-\\d\\d\\d";
 		
 		LocalDate dataDoAtendimento = null;
 		// tenta obter a data no segundo formato ddmmyyyy
@@ -273,17 +280,21 @@ public class GerenciadorImpl implements Gerenciador {
 			dataDoAtendimento = LocalDate.now();
 		}
 
+		if(dataDoAtendimento == null) {
+			dataDoAtendimento = LocalDate.now();
+			
+		}
 		
 		//verifica se o atendimento foi agendado para mais de 10 dias
-		if(dataDoAtendimento.isAfter(LocalDate.now().plusDays(10))) {
-			log.info("Data informada agendada para mais de 10 dias -> {}", dto.getDataDoAtendimento());
-			throw new BusinessException("Não é possível registrar atendimento para daqui a mais de 10 dias.");
+		if(dataDoAtendimento.isAfter(LocalDate.now().plusDays(30))) {
+			log.info("Data informada agendada para mais de 30 dias -> {}", dto.getDataDoAtendimento());
+			throw new BusinessException("Não é possível registrar atendimento para daqui a mais de 30 dias.");
 		}
 		
 		//verifica se o atendimento ocorreu a mais de 30 dias
-		if(dataDoAtendimento.isBefore(LocalDate.now().minusDays(30))) {
-			log.info("Data informada ocorrida a mais de 30 dias -> {}", dto.getDataDoAtendimento());
-			throw new BusinessException("Não é possível registrar atendimento que ocorreu a mais de 30 dias.");
+		if(dataDoAtendimento.isBefore(LocalDate.now().minusDays(120))) {
+			log.info("Data informada ocorrida a mais de 120 dias -> {}", dto.getDataDoAtendimento());
+			throw new BusinessException("Não é possível registrar atendimento que ocorreu a mais de 120 dias.");
 		}
 		
 		log.info("Data informada ...OK!");
@@ -315,8 +326,8 @@ public class GerenciadorImpl implements Gerenciador {
 	private String resolveNomeDaPasta(LocalDate dataDoAtendimento, List<Persona> produtores, List<Atendimento> servicosPrestados) {
 		StringBuilder fileName = new StringBuilder();
 
-		log.info("Produtor selecionado: {}", produtores.get(0));
-		log.info("Servicos : {} ", servicosPrestados);
+		log.info("Criando pasta para o produtor: {}", produtores.get(0));
+		log.info("Servicos registrados na pasta : {} ", servicosPrestados);
 		// Formato: ANO-MES-DIA -NOME_DO_CLIENTE -CODIGO_DE_BUSCA -SERV_01 -VL_SERV_01
 		// -SERV_02 -VL_SERV_02 -DAE -ART
 		// DAE E ART somente se foi emitida e não quitada.
@@ -368,7 +379,7 @@ try {
 			}
 
 		}
-		log.info("Criando pasta: {}", fileName.toString());
+
 		return fileName.toString();
 	}
 
@@ -447,16 +458,15 @@ try {
 	private Persona transoformaEmProdutor(ProdutoPostMinDto produtorMin) {
 		Persona produtor = null;
 		// verifica se o produtore já é cadastrado
-		log.info("Modificando produtor: {}", produtorMin);
 		
 		//Verifica se existe este produtor, caso negativo, a variavel é configurada como null
 		produtor = this.produtorService.whatIsCpf(produtorMin.getCpf());
 		if (produtor != null) {
-			log.info("Produtor modificado...retornando: {}", produtor);
+
 			return produtor;
 		} else {
 			produtor = this.produtorService.saveMin(produtorMin);
-			log.info("Produtor modificado...retornando: {}", produtor);
+
 			return produtor;
 			
 		}
