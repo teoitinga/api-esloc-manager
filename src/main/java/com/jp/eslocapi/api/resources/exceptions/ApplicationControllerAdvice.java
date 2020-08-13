@@ -39,6 +39,12 @@ public class ApplicationControllerAdvice {
 		
 		return new ApiErrors(ex.getMessage());
 	}
+	@ExceptionHandler(java.lang.IllegalArgumentException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ApiErrors handleIllegalArgumentException(IllegalArgumentException ex) {
+		
+		return new ApiErrors(ex.getMessage());
+	}
 	@ExceptionHandler(FolderNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ApiErrors handleFolderNotFoundException(FolderNotFoundException ex) {

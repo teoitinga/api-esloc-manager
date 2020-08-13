@@ -69,7 +69,7 @@ public class UsuarioController {
 		@ApiResponse(code=404, message = "")
 	})
 	public TokenDto autenticar(@RequestBody CredenciaisDto credenciais) {
-		
+		log.info("Request authentication {} ", credenciais);
 		 UserDetails usuario = this.usuarioService.autenticar(credenciais);
 
 		 Persona usuarioAutenticado = this.personaService.getProdutorByCpf(usuario.getUsername());

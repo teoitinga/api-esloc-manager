@@ -57,6 +57,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.antMatchers("/api/v1/usuarios/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
+			    .cors()
+			    .and()
 				.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint())
 			.and()
 			.sessionManagement()

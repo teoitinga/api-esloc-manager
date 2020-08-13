@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -33,6 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("api/v1/tarefas")
 @Slf4j
 @Api("Atendimentos")
+@CrossOrigin("*")
 public class TarefaController {
 	
 	@Autowired
@@ -52,7 +54,7 @@ public class TarefaController {
 	@ResponseStatus(HttpStatus.OK)
 	public List<AtendimentosBasicGetDto> obtemAtendimentos(
 			@RequestParam(value = "page", defaultValue = "0") Integer page,
-			@RequestParam(value = "size", defaultValue = "5") Integer size
+			@RequestParam(value = "size", defaultValue = "50") Integer size
 			) {
 		return this.atendimentoService.findAll(PageRequest.of(page, size));
 	}
