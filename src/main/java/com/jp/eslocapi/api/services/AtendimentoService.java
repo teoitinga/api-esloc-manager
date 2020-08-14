@@ -15,8 +15,6 @@ public interface AtendimentoService {
 
 	List<AtendimentosBasicGetDto> findAll(Pageable pageable);
 
-	List<AtendimentosBasicGetDto> meusLancamentosHoje(LocalDate inicio, LocalDate fim);
-
 	void updateStatusTarefa(Long id, String status);
 
 	void updateResponsavelTarefa(Long id, String responsavel);
@@ -28,5 +26,7 @@ public interface AtendimentoService {
 	String obtemPastaDoAtendimento(Long idAtendimento);
 
 	Atendimento findById(String idTarefa);
+
+	List<AtendimentosBasicGetDto> meusLancamentosHoje();
 
 }

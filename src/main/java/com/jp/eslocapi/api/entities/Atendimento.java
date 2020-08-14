@@ -48,7 +48,7 @@ public class Atendimento {
 	@Column(name = "emissor_cpf")
 	private String emissor;
 	
-	@Column
+	@Column(name = "recomendacoes")
 	private String observacoes;
 
 	@Column
@@ -98,6 +98,9 @@ public class Atendimento {
 	
 	@Column
 	private LocalDate dataConclusaoPrevista;
+
+	@Column(name = "tornar_publico")
+	private Boolean tornarPublico;
 	
 	@PrePersist
 	public void setDataCadastro() {

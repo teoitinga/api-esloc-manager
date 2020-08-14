@@ -5,7 +5,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,12 +15,9 @@ import com.jp.eslocapi.api.dto.CredenciaisDto;
 import com.jp.eslocapi.api.dto.TokenDto;
 import com.jp.eslocapi.api.dto.UserDto;
 import com.jp.eslocapi.api.entities.Persona;
-import com.jp.eslocapi.api.exceptions.ApiErrors;
-import com.jp.eslocapi.api.secutiry.exceptions.UserNameNotFoundException;
 import com.jp.eslocapi.api.secutiry.jwt.JwtService;
 import com.jp.eslocapi.api.secutiry.user.UsuarioServiceImpl;
 import com.jp.eslocapi.api.services.ProdutorService;
-import com.jp.eslocapi.exceptions.BusinessException;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiResponse;
@@ -80,10 +76,5 @@ public class UsuarioController {
 				 .token(token)
 				 .build();
 	}
-	@ExceptionHandler(UserNameNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ApiErrors handleUserNameNotFoundException(BusinessException ex) {
-		
-		return new ApiErrors(ex.getMessage());
-	}
+
 }

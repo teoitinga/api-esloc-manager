@@ -17,6 +17,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.jp.eslocapi.api.resources.exceptions.CustomAuthenticationEntryPoint;
 import com.jp.eslocapi.api.secutiry.jwt.JwtAuthFilter;
 import com.jp.eslocapi.api.secutiry.jwt.JwtService;
+import com.jp.eslocapi.api.secutiry.jwt.UnauthorizedHandler;
 import com.jp.eslocapi.api.secutiry.user.UsuarioServiceImpl;
 
 @EnableWebSecurity
@@ -28,8 +29,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
 	private JwtService jwtService;
+	
 
-	@Override
+    @Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth
 			.userDetailsService(usuarioService)
@@ -57,12 +59,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.antMatchers("/api/v1/usuarios/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
+				.sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.and()
 			    .cors()
-			    .and()
-				.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint())
-			.and()
-			.sessionManagement()
-			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//			    .and()
+//				.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint())
 			.and()
 			.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
 

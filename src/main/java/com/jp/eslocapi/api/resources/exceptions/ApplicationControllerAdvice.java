@@ -4,12 +4,13 @@ import javax.validation.ConstraintViolationException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException.Forbidden;
-
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.jp.eslocapi.api.exceptions.ApiErrors;
 import com.jp.eslocapi.api.exceptions.AtendimentoNotFound;
 import com.jp.eslocapi.api.exceptions.DocumentNotFoundException;
@@ -17,7 +18,6 @@ import com.jp.eslocapi.api.exceptions.InvalidPasswordException;
 import com.jp.eslocapi.api.exceptions.MetaNotUniqueException;
 import com.jp.eslocapi.api.exceptions.ProdutorNotFound;
 import com.jp.eslocapi.api.exceptions.ServiceNotFound;
-import com.jp.eslocapi.api.secutiry.exceptions.UserNameNotFoundException;
 import com.jp.eslocapi.exceptions.BusinessException;
 import com.jp.eslocapi.util.exceptions.FolderNotFoundException;
 
@@ -33,30 +33,34 @@ public class ApplicationControllerAdvice {
 		return new ApiErrors(resultErrors);
 	}
 
-	@ExceptionHandler(UserNameNotFoundException.class)
+	@ExceptionHandler(UsernameNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ApiErrors handleUserNameNotFoundException(BusinessException ex) {
+	public ApiErrors handleUserNameNotFoundException(UsernameNotFoundException ex) {
 		
 		return new ApiErrors(ex.getMessage());
 	}
+
 	@ExceptionHandler(java.lang.IllegalArgumentException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ApiErrors handleIllegalArgumentException(IllegalArgumentException ex) {
 		
 		return new ApiErrors(ex.getMessage());
 	}
+	
 	@ExceptionHandler(FolderNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ApiErrors handleFolderNotFoundException(FolderNotFoundException ex) {
 		
 		return new ApiErrors(ex.getMessage());
 	}
+	
 	@ExceptionHandler(MetaNotUniqueException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ApiErrors handleMetaNotUniqueException(MetaNotUniqueException ex) {
 		
 		return new ApiErrors(ex.getMessage());
 	}
+	
 	@ExceptionHandler(BusinessException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ApiErrors handleBusinessException(BusinessException ex) {
@@ -91,9 +95,15 @@ public class ApplicationControllerAdvice {
 		
 		return new ApiErrors("Nenhum atendimento encontrado.");
 	}
+	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ApiErrors handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
+		
+		return new ApiErrors("Não existe o recurso solicitado.");
+	}
 	
 	@ExceptionHandler(InvalidPasswordException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ApiErrors handleInvalidPasswordException(InvalidPasswordException ex) {
 		
 		return new ApiErrors(ex.getMessage());

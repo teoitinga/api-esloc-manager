@@ -51,7 +51,7 @@ public class AtendimentoServiceImpl implements AtendimentoService{
 
 	@Override
 	public List<AtendimentosBasicGetDto> findAll(Pageable pageable) {
-		Page<Atendimento> atd = this.repository.findAll(pageable);
+		Page<Atendimento> atd = this.repository.findAllOrderByDataCadastroDesc(pageable);
 		return atd.stream().map(atendimento->toAtendimentosBasicGetDto(atendimento)).collect(Collectors.toList());
 	}
 
@@ -108,7 +108,9 @@ public class AtendimentoServiceImpl implements AtendimentoService{
 	}
 
 	@Override
-	public List<AtendimentosBasicGetDto> meusLancamentosHoje( LocalDate inicio, LocalDate fim ) {
+	public List<AtendimentosBasicGetDto> meusLancamentosHoje() {
+		LocalDate inicio = LocalDate.now().minusDays(1);
+		LocalDate fim = LocalDate.now().plusDays(1);
 		//busca o usuario atual
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();

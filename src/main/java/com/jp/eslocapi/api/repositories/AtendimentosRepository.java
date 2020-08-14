@@ -34,5 +34,8 @@ public interface AtendimentosRepository extends JpaRepository<Atendimento, Long>
 	@Query(value = "SELECT * FROM atendimento a where a.emissor_cpf = :cpf and a.status_tarefa = :status order by a.id DESC", nativeQuery = true)
 	Optional<List<Atendimento>> meusAtendimentos(String status, String cpf);
 
+	@Query(value = "SELECT a FROM Atendimento a where a.tornarPublico is null order by a.dataCadastro DESC")
+	Page<Atendimento> findAllOrderByDataCadastroDesc(Pageable pageable);
+
 
 }

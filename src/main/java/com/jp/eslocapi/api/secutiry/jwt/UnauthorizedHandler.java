@@ -1,4 +1,4 @@
-package com.jp.eslocapi.api.resources.exceptions;
+package com.jp.eslocapi.api.secutiry.jwt;
 
 import java.io.IOException;
 
@@ -11,8 +11,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jp.eslocapi.api.exceptions.ApiErrors;
-
-public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class UnauthorizedHandler implements AuthenticationEntryPoint {
 
 	@Override
 	public void commence(HttpServletRequest request, 
@@ -27,7 +26,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 		
 		ObjectMapper mapper = new ObjectMapper();
 		response.getWriter().write(mapper.writeValueAsString(new ApiErrors("Você não tem permissão para acessar esta API.")));
+
 		
 	}
-
-	}
+}

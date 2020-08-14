@@ -97,10 +97,9 @@ public class TarefaController {
 	@ResponseStatus(HttpStatus.OK)
 	public List<AtendimentosBasicGetDto> obtemLancamentoDeHojeDoUsuario() {
 		
-		LocalDate inicio = LocalDate.now().minusDays(1);
-		LocalDate fim = LocalDate.now().plusDays(1);
+
 		
-		return this.atendimentoService.meusLancamentosHoje(inicio, fim);
+		return this.atendimentoService.meusLancamentosHoje();
 	}
 	@GetMapping("/minhasTarefas/{status}")
 	@ApiOperation("Obtem os lançamentos em aberto sob responsabilidade do usuário")

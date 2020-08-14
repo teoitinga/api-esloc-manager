@@ -16,7 +16,6 @@ import com.jp.eslocapi.api.entities.EnumPermissao;
 import com.jp.eslocapi.api.entities.Persona;
 import com.jp.eslocapi.api.exceptions.InvalidPasswordException;
 import com.jp.eslocapi.api.repositories.ProdutorRepository;
-import com.jp.eslocapi.api.secutiry.exceptions.UserNameNotFoundException;
 import com.jp.eslocapi.exceptions.BusinessException;
 
 import lombok.RequiredArgsConstructor;
@@ -35,7 +34,7 @@ public class UsuarioServiceImpl implements UserDetailsService{
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
 		Persona usuario = repository.findByCpf(username)
-					.orElseThrow(()-> new UserNameNotFoundException());
+					.orElseThrow(()-> new UsernameNotFoundException("Usuário não encontrado"));
 		return User.builder()
 				.username(usuario.getCpf())
 				.password(usuario.getPassword())
