@@ -49,7 +49,10 @@ public class Atendimento {
 	private String emissor;
 	
 	@Column(name = "recomendacoes")
-	private String observacoes;
+	private String recomendacoes;
+
+	@Column(name = "codigo_atendimento")
+	private String codigo;
 
 	@Column
 	private String tarefaDescricao;

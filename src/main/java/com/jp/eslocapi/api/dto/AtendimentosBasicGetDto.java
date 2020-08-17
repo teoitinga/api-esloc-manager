@@ -17,8 +17,8 @@ public class AtendimentosBasicGetDto {
 	private String descricaoDoServico;
 	private String emitiuDae;
 	private String emitiuArt;
-	private String observacao;
 	private String valorDae;
 	private String valorServico;
+	private String recomendacoes;
 
 }

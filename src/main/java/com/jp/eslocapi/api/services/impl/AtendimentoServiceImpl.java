@@ -98,7 +98,7 @@ public class AtendimentoServiceImpl implements AtendimentoService{
 				.dataDoAtendimento(dataDoAtendimento )
 				.produtor(atendimento.getProdutor().getNome())
 				.descricaoDoServico(atendimento.getTarefaDescricao())
-				.observacao(atendimento.getObservacoes())
+				.recomendacoes(atendimento.getRecomendacoes())
 				.emitiuArt(atendimento.getEmitiuART().toString())
 				.emitiuDae(atendimento.getEmitiuDAE().toString())
 				.servico(atendimento.getTiposervico().getDescricaoTipo())

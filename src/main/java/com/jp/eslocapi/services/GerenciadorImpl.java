@@ -96,11 +96,11 @@ public class GerenciadorImpl implements Gerenciador {
 		
 		// obtem o texto sobre observacoes da tarefa e confirua como string vazia caso
 		// seja nulo
-		String observacoes = dto.getObservacoes();
-		if (dto.getObservacoes() == null) {
-			observacoes = "";
+		String recomendacoes = dto.getRecomendacoes();
+		if (dto.getRecomendacoes() == null) {
+			recomendacoes = "";
 		}
-		atendimento.setObservacoes(observacoes);
+		atendimento.setRecomendacoes(recomendacoes);
 		
 		// obtem a lista de pessoal atendido
 		// Para cada produtor sera gerada uma tarefa com os dados informados
@@ -133,7 +133,7 @@ public class GerenciadorImpl implements Gerenciador {
 			tarefa = Tarefa.builder()
 					.atendimentos(servicosPrestados)
 					.produtores(produtores)
-					.obervacao(observacoes)
+					.obervacao(recomendacoes)
 					.build();
 
 			tarefaBuilder(tarefa);
@@ -225,7 +225,7 @@ public class GerenciadorImpl implements Gerenciador {
 			valorDae = BigDecimal.ZERO;
 		}
 
-		String observacoes = atd.getObservacoes();
+		String recomendacoes = atd.getRecomendacoes();
 		String tarefaDescricao = servico.getDescricaoDoServico();
 		TipoServico tiposervico = tipoDeServico;
 
@@ -241,7 +241,7 @@ public class GerenciadorImpl implements Gerenciador {
 				.tiposervico(tiposervico)
 				.valorDoServico(valor)
 				.valorDoDae(valorDae)
-				.observacoes(observacoes)
+				.recomendacoes(recomendacoes)
 				.build();
 	}
 
@@ -312,15 +312,21 @@ public class GerenciadorImpl implements Gerenciador {
 		EnumYesNo emitiuART = atd.getEmitiuART();
 		EnumYesNo emitiuDAE = atd.getEmitiuDAE();
 		String responsavel = atd.getResponsavel();
-		String observacoes = atd.getObservacoes();
+		String recomendacoes = atd.getRecomendacoes();
 		String tarefaDescricao = servico.getDescricaoDoServico();
 		Persona produtor = atd.getProdutor();
 		TipoServico tiposervico = tipoDeServico;
 		BigDecimal valorDoServico = atd.getValorDoServico();
-		return Atendimento.builder().produtor(produtor).dataAtendimento(dataAtendimento)
-				.dataConclusaoPrevista(dataConclusaoPrevista).emissor(emissor).responsavel(responsavel)
-				.emitiuART(emitiuART).emitiuDAE(emitiuDAE).tarefaDescricao(tarefaDescricao).tiposervico(tiposervico)
-				.valorDoServico(valorDoServico).observacoes(observacoes).build();
+		return Atendimento.builder().produtor(produtor)
+				.dataAtendimento(dataAtendimento)
+				.dataConclusaoPrevista(dataConclusaoPrevista)
+				.emissor(emissor).responsavel(responsavel)
+				.emitiuART(emitiuART).emitiuDAE(emitiuDAE)
+				.tarefaDescricao(tarefaDescricao)
+				.tiposervico(tiposervico)
+				.valorDoServico(valorDoServico)
+				.recomendacoes(recomendacoes)
+				.build();
 	}
 	
 	private String resolveNomeDaPasta(LocalDate dataDoAtendimento, List<Persona> produtores, List<Atendimento> servicosPrestados) {
@@ -413,7 +419,7 @@ try {
 
 	}
 
-	private void registraAtendimento(Atendimento atendimento, Persona produtor, String obs) {
+	private void registraAtendimento(Atendimento atendimento, Persona produtor, String recomendacoes) {
 		Atendimento atd = new Atendimento();
 		Persona prd = produtor;
 		atd = Atendimento.builder()
@@ -428,7 +434,8 @@ try {
 				.statusTarefa(atendimento.getStatusTarefa())
 				.emissor(atendimento.getEmissor())
 				.responsavel(atendimento.getResponsavel())
-				.statusTarefa(EnumStatus.INICIADA).observacoes(obs)
+				.statusTarefa(EnumStatus.INICIADA)
+				.recomendacoes(recomendacoes)
 				.produtor(prd).build();
 		atd = this.atendimentoService.save(atd);
 

@@ -25,5 +25,5 @@ public class TarefaPostDto {
 	
 	private String responsavel;
 
-	private String observacoes;
+	private String recomendacoes;
 }
