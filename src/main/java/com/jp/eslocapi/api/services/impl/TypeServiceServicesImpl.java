@@ -1,6 +1,7 @@
 package com.jp.eslocapi.api.services.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -77,6 +78,19 @@ public class TypeServiceServicesImpl implements TypeServiceService {
 				.tempoEstimado(tempo).valorReferencia(valor).build();
 
 		return this.toServicoDto(this.repository.save(savedServico));
+	}
+
+	@Override
+	public List<ServicoDto> findByLegenda(String codigo) {
+		return this.findByLegenda(codigo);
+	}
+
+	@Override
+	public List<ServicoDto> findByDescricao(String descricao) {
+		List<ServicoDto> response = new ArrayList<>();
+		List<TipoServico> lista = this.repository.findByDescricaoTipoContaining(descricao).orElse(new ArrayList<>());
+		response = this.toListServicoDto(lista);
+		return response;
 	}
 
 }

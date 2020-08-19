@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,10 +22,15 @@ public class ServiceResource {
 	@Autowired
 	TypeServiceService service;
 	
-	@GetMapping
+	@GetMapping()
 	@ResponseStatus(HttpStatus.OK)
-	public List<ServicoDto> getAllDocuments() {
+	public List<ServicoDto> getAllServices(){
 		return this.service.findAll();
+	}
+	@GetMapping("{codigo}")
+	@ResponseStatus(HttpStatus.OK)
+	public List<ServicoDto> getServiceByCode(@PathVariable String codigo) {
+		return this.service.findByDescricao(codigo);
 	}
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)

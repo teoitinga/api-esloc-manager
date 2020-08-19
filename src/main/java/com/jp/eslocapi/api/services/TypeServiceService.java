@@ -19,4 +19,8 @@ public interface TypeServiceService {
 	void deleteAll();
 
 	ServicoDto create(ServicoDto dto);
+
+	List<ServicoDto> findByLegenda(String codigo);
+
+	List<ServicoDto> findByDescricao(String codigo);
 }
