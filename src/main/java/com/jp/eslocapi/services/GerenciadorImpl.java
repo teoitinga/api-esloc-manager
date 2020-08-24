@@ -116,22 +116,42 @@ public class GerenciadorImpl implements Gerenciador {
 		List<Atendimento> servicosPrestados;
 		
 		servicosPrestados = obtemListaDeServicos(dto.getTipoServico(), atendimento);
+
+		//define o codigo do atendimento
+		///código formado pela data em formato yyyyMMddhhMM[CPF]
+		StringBuilder codigo = new StringBuilder(); 
+		
+		//obtem a hora atual
+		Integer hora = LocalDateTime.now().getHour();
+		//obtem os minutos
+		Integer minuto = LocalDateTime.now().getMinute();
+		
+		LocalDateTime dataDoAtendimentoTime = servicosPrestados.get(0).getDataAtendimento().atTime(hora, minuto); 
+		
+		codigo.append(dataDoAtendimentoTime.format(folderDate.keyDateTimeFormater()));
+		
+		codigo.append(produtores.get(0).getCpf());
+		//configura código do atendimento
 		
 		//percorre a lista de produrores
 		//rodutores.stream().map(produtor->registrServicoParaProdutor(produtor))
 		
 		//ao final de todas as variáveis devidamente confiruadas, faz o registro dos atendimentos na variável global
-		registraAtendimentos(servicosPrestados, produtores);
+		registraAtendimentos(servicosPrestados, produtores, codigo.toString());
 		// obtem a lista de servicos prestados
 		//List<Atendimento> servicosPrestados = converteParaListaDeAtendimentos(dto.getTipoServico(), atendimento);
 		
+
+		
+		//Executa ação para criar pasta do atendimento
+
 		//Definie informações para nome da pasta
 		String nomeDaPasta = "";
-		//Executa ação para criar pasta do atendimento
-		if(dto.getCreateFolder()) {
+		
 			
 			try {
-				nomeDaPasta = resolveNomeDaPasta(servicosPrestados.get(0).getDataAtendimento(), produtores, servicosPrestados);
+//				nomeDaPasta = resolveNomeDaPasta(servicosPrestados.get(0).getDataAtendimento(), produtores, servicosPrestados);
+				nomeDaPasta = resolveNomeDaPasta(codigo.toString(), produtores, servicosPrestados);
 				
 				tarefa = Tarefa.builder()
 						.atendimentos(servicosPrestados)
@@ -147,30 +167,36 @@ public class GerenciadorImpl implements Gerenciador {
 			
 			// CRIA a pasta com o nome e caminho definido
 			try {
-				this.fileUtil.createFolder(nomeDaPasta);
+				if(dto.getCreateFolder()) {
+					this.fileUtil.createFolder(nomeDaPasta);
+
+				}
 			} catch (DoNotCreateFolder e) {
 				// TODO Auto-generated catch block
 				throw new BusinessException("Não foi possível crar a pasta para o atendimento!");
 				
 			}
-		}
+		
 
 	}
-	private void registraAtendimentos(List<Atendimento> servicosPrestados, List<Persona> produtores) {
+	
+	private void registraAtendimentos(List<Atendimento> servicosPrestados, List<Persona> produtores, String codigo) {
 		//percorre a lista de produtores gerando os atendimentos para cada um
-		produtores.forEach(produtor->criaAtendimentoParaProdutor(produtor, servicosPrestados));
+		produtores.forEach(produtor->criaAtendimentoParaProdutor(produtor, servicosPrestados, codigo));
 		
 	}
-	private void criaAtendimentoParaProdutor(Persona produtor, List<Atendimento> servicos) {
+	private void criaAtendimentoParaProdutor(Persona produtor, List<Atendimento> servicos, String codigo) {
 		//percorre a lista de servicos criando um atendimento para cada serviço
-		servicos.forEach(servico->criarAtendimento(servico, produtor));
+		servicos.forEach(servico->criarAtendimento(servico, produtor, codigo));
 		
 	}
 
-	private void criarAtendimento(Atendimento servico, Persona produtor) {
+	private void criarAtendimento(Atendimento servico, Persona produtor, String codigo) {
 		servico.setProdutor(produtor);
+		servico.setCodigo(codigo);
 		//salva o atendimento
 		log.info("Registrando atendimentos do produtor: {}", servico.getProdutor().getNome());
+		log.info("Registrando atendimentos codigo: {}", servico.getCodigo());
 	}
 	//retorna a lista de atendimentos, porém o produtor ainda não está configurado
 	private List<Atendimento> obtemListaDeServicos(List<AtendimentoBasicDto> servico, Atendimento atd) {
@@ -333,8 +359,11 @@ public class GerenciadorImpl implements Gerenciador {
 				.build();
 	}
 	
-	private String resolveNomeDaPasta(LocalDate dataDoAtendimento, List<Persona> produtores, List<Atendimento> servicosPrestados) {
+//	private String resolveNomeDaPasta(LocalDate dataDoAtendimento, List<Persona> produtores, List<Atendimento> servicosPrestados) {
+	private String resolveNomeDaPasta(String codigoDoAtendimento, List<Persona> produtores, List<Atendimento> servicosPrestados) {
+
 		StringBuilder fileName = new StringBuilder();
+		LocalDate dataDoAtendimento = LocalDate.now();
 
 		log.info("Criando pasta para o produtor: {}", produtores.get(0));
 		log.info("Servicos registrados na pasta : {} ", servicosPrestados);
@@ -346,13 +375,14 @@ public class GerenciadorImpl implements Gerenciador {
 		// LocalDate.now().format(folderDate.folderDateTimeFormater());
 		// fileName.append(dataAtual);
 		// 3a Parte: -CODIGO_DE_BUSCA COMPOSTA PELO CPFDIAMESANO
-		//obtem a hora atual
-		Integer hora = LocalDateTime.now().getHour();
-		//obtem os minutos
-		Integer minuto = LocalDateTime.now().getMinute();
-		LocalDateTime dataDoAtendimentoTime = dataDoAtendimento.atTime(hora, minuto); 
+//		//obtem a hora atual
+//		Integer hora = LocalDateTime.now().getHour();
+//		//obtem os minutos
+//		Integer minuto = LocalDateTime.now().getMinute();
+//		LocalDateTime dataDoAtendimentoTime = dataDoAtendimento.atTime(hora, minuto); 
 try {
-	fileName.append(dataDoAtendimentoTime.format(folderDate.keyDateTimeFormater()));
+//	fileName.append(dataDoAtendimentoTime.format(folderDate.keyDateTimeFormater()));
+	fileName.append(codigoDoAtendimento);
 	
 } catch(java.time.temporal.UnsupportedTemporalTypeException ex) {
 	
@@ -440,6 +470,7 @@ try {
 				.responsavel(atendimento.getResponsavel())
 				.statusTarefa(EnumStatus.INICIADA)
 				.recomendacoes(recomendacoes)
+				.codigo(atendimento.getCodigo())
 				.produtor(prd).build();
 		atd = this.atendimentoService.save(atd);
 
