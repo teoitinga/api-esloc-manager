@@ -1,7 +1,10 @@
 package com.jp.eslocapi.api.services;
 
+import java.util.List;
+
 import com.jp.eslocapi.api.dto.ProdutoPostMinDto;
 import com.jp.eslocapi.api.dto.ProdutorDto;
+import com.jp.eslocapi.api.dto.ResponsaveisDto;
 import com.jp.eslocapi.api.entities.Persona;
 
 public interface ProdutorService {
@@ -27,4 +30,6 @@ public interface ProdutorService {
 	Persona getProdutorByCpf(String cpf);
 
 	void delete(String cpf);
+
+	List<ResponsaveisDto> findTecnicoByName(String nome);
 }

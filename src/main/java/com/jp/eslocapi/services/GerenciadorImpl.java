@@ -127,28 +127,32 @@ public class GerenciadorImpl implements Gerenciador {
 		
 		//Definie informações para nome da pasta
 		String nomeDaPasta = "";
-		try {
-			nomeDaPasta = resolveNomeDaPasta(servicosPrestados.get(0).getDataAtendimento(), produtores, servicosPrestados);
-
-			tarefa = Tarefa.builder()
-					.atendimentos(servicosPrestados)
-					.produtores(produtores)
-					.obervacao(recomendacoes)
-					.build();
-
-			tarefaBuilder(tarefa);
-
-		} catch (NullPointerException ex) {
-			ex.printStackTrace();
-		}
-
-		// CRIA a pasta com o nome e caminho definido
-		try {
-			this.fileUtil.createFolder(nomeDaPasta);
-		} catch (DoNotCreateFolder e) {
-			// TODO Auto-generated catch block
-			throw new BusinessException("Não foi possível crar a pasta para o atendimento!");
-
+		//Executa ação para criar pasta do atendimento
+		if(dto.getCreateFolder()) {
+			
+			try {
+				nomeDaPasta = resolveNomeDaPasta(servicosPrestados.get(0).getDataAtendimento(), produtores, servicosPrestados);
+				
+				tarefa = Tarefa.builder()
+						.atendimentos(servicosPrestados)
+						.produtores(produtores)
+						.obervacao(recomendacoes)
+						.build();
+				
+				tarefaBuilder(tarefa);
+				
+			} catch (NullPointerException ex) {
+				ex.printStackTrace();
+			}
+			
+			// CRIA a pasta com o nome e caminho definido
+			try {
+				this.fileUtil.createFolder(nomeDaPasta);
+			} catch (DoNotCreateFolder e) {
+				// TODO Auto-generated catch block
+				throw new BusinessException("Não foi possível crar a pasta para o atendimento!");
+				
+			}
 		}
 
 	}

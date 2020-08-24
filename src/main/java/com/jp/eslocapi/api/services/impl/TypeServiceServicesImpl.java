@@ -82,7 +82,7 @@ public class TypeServiceServicesImpl implements TypeServiceService {
 
 	@Override
 	public List<ServicoDto> findByLegenda(String codigo) {
-		return this.findByLegenda(codigo);
+		return null;//this.findByLegenda(codigo);
 	}
 
 	@Override

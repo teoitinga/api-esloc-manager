@@ -3,15 +3,20 @@ package com.jp.eslocapi.api.services.impl;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.info.ProjectInfoProperties.Build;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.deser.impl.ExternalTypeHandler.Builder;
 import com.jp.eslocapi.Configuration;
 import com.jp.eslocapi.api.dto.ProdutoPostMinDto;
 import com.jp.eslocapi.api.dto.ProdutorDto;
+import com.jp.eslocapi.api.dto.ResponsaveisDto;
 import com.jp.eslocapi.api.entities.EnumCategoria;
 import com.jp.eslocapi.api.entities.EnumEscolaridade;
 import com.jp.eslocapi.api.entities.EnumGender;
@@ -22,7 +27,10 @@ import com.jp.eslocapi.api.repositories.ProdutorRepository;
 import com.jp.eslocapi.api.services.ProdutorService;
 import com.jp.eslocapi.exceptions.BusinessException;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class ProdutorServiceImpl implements ProdutorService {
 
 	@Value("${esloc.date.view}")
@@ -247,6 +255,31 @@ public class ProdutorServiceImpl implements ProdutorService {
 	@Override
 	public Persona getProdutorByCpf(String cpf) {
 		return repository.findByCpf(cpf).orElseThrow(()-> new ProdutorNotFound());
+	}
+
+	@Override
+	public List<ResponsaveisDto> findTecnicoByName(String nome) {
+		List<ResponsaveisDto> tecnicosDto = null;
+		log.info("tecnicos buscar por {}", nome);
+
+		List<Persona> tecnicos = this.repository.findByNomeContainingOderByNomeDesc(nome);
+		log.info("tecnicos {}", tecnicos);
+		tecnicosDto = tecnicos.stream().map(tecnico->convertToListTecnicosDto(tecnico)).collect(Collectors.toList());
+		return tecnicosDto;
+	}
+
+	private ResponsaveisDto convertToListTecnicosDto(Persona tecnico) {
+		String categoria = "";
+		try {
+			categoria = tecnico.getCategoria().toString();
+		}catch(NullPointerException ex) {
+			
+		}
+		return ResponsaveisDto.builder()
+				.categoria(categoria)
+				.nome(tecnico.getNome())
+				.cpf(tecnico.getCpf())
+				.build();
 	}
 
 

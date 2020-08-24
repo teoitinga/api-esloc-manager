@@ -26,4 +26,6 @@ public class TarefaPostDto {
 	private String responsavel;
 
 	private String recomendacoes;
+	
+	private Boolean createFolder;
 }
