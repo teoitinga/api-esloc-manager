@@ -278,7 +278,10 @@ public class GerenciadorImpl implements Gerenciador {
 	// verifica se a data é válida
 	private LocalDate getDateValid(TarefaPostDto dto) {
 		
+		log.info("Data informada: {}", dto.getDataDoAtendimento());
+		
 		LocalDate dataDoAtendimento = null;
+		
 		// tenta obter a data no segundo formato ddmmyyyy
 		try {
 			dataDoAtendimento = LocalDate.parse(dto.getDataDoAtendimento(),
@@ -315,19 +318,24 @@ public class GerenciadorImpl implements Gerenciador {
 			
 		}
 		
+		//tenta obter o formato original
+		try {
+			dataDoAtendimento = LocalDate.parse(dto.getDataDoAtendimento());
+		}catch(DateTimeParseException e) {
+			
+		}
 		//verifica se o atendimento foi agendado para mais de 10 dias
-		if(dataDoAtendimento.isAfter(LocalDate.now().plusDays(30))) {
+		if(dataDoAtendimento.isAfter(LocalDate.now().plusDays(360))) {
 			log.info("Data informada agendada para mais de 30 dias -> {}", dto.getDataDoAtendimento());
-			throw new BusinessException("Não é possível registrar atendimento para daqui a mais de 30 dias.");
+			throw new BusinessException("Não é possível registrar atendimento para daqui a mais de 360 dias.");
 		}
 		
 		//verifica se o atendimento ocorreu a mais de 30 dias
-		if(dataDoAtendimento.isBefore(LocalDate.now().minusDays(120))) {
+		if(dataDoAtendimento.isBefore(LocalDate.now().minusDays(360))) {
 			log.info("Data informada ocorrida a mais de 120 dias -> {}", dto.getDataDoAtendimento());
-			throw new BusinessException("Não é possível registrar atendimento que ocorreu a mais de 120 dias.");
+			throw new BusinessException("Não é possível registrar atendimento que ocorreu a mais de 360 dias.");
 		}
-		
-		log.info("Data informada ...OK!");
+		log.info("Data informada modificada: {}", dataDoAtendimento);	
 		return dataDoAtendimento;
 	}
 

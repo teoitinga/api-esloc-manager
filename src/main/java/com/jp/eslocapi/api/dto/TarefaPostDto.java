@@ -1,5 +1,6 @@
 package com.jp.eslocapi.api.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
@@ -12,7 +13,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TarefaPostDto {
+public class TarefaPostDto implements Serializable{
+
+	private static final long serialVersionUID = -4910856334927283441L;
+
 
 	@NotEmpty(message = "Você deve informar o cpf do solicitante.")
 	private List<ProdutoPostMinDto> produtorInfo;
