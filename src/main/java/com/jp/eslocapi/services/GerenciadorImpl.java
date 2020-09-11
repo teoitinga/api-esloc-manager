@@ -395,7 +395,7 @@ try {
 } catch(java.time.temporal.UnsupportedTemporalTypeException ex) {
 	
 }
-		fileName.append(produtores.get(0).getCpf());
+		//fileName.append(produtores.get(0).getCpf());
 
 		// 2a Parte: NOME_DO_CLIENTE
 		String nomeDoProdutor = produtores.get(0).getNome().toUpperCase();
