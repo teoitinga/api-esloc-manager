@@ -50,14 +50,21 @@ public class TarefaController {
 		this.gerenciador.buildTarefa(dto);
 		
 	}
+	
 	@GetMapping
+	@ApiOperation("Lista de atendimentos realizados pelo usuario atual")
+	@ApiResponses({ @ApiResponse(code = 200, message = ""),
+		@ApiResponse(code = 404, message = "Nenhum atendimento encontrado.") })
 	@ResponseStatus(HttpStatus.OK)
 	public List<AtendimentosBasicGetDto> obtemAtendimentos(
 			@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "size", defaultValue = "50") Integer size
 			) {
+		log.info("Buscando atendimentos");
 		return this.atendimentoService.findAll(PageRequest.of(page, size));
 	}
+	
+	
 	@PutMapping("/{id}/status/{status}")
 	@ApiOperation("Modificao status do atendimento referente ao ID informado")
 	@ApiResponses({ @ApiResponse(code = 200, message = ""),

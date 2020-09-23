@@ -37,5 +37,8 @@ public interface AtendimentosRepository extends JpaRepository<Atendimento, Long>
 	@Query(value = "SELECT a FROM Atendimento a where a.tornarPublico is null order by a.dataCadastro DESC")
 	Page<Atendimento> findAllOrderByDataCadastroDesc(Pageable pageable);
 
+	@Query(value = "SELECT a FROM Atendimento a where (a.responsavel = :cpf) and ((a.statusTarefa != 'FINALIZADA') and (a.statusTarefa != 'CANCELADA'))  order by a.dataCadastro DESC")
+	Page<Atendimento> findMyAtendimentosAConcluir( @Param("cpf") String cpf, Pageable pageable);
+
 
 }

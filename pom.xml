@@ -113,6 +113,12 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- JTS Topology Suite 
+		<dependency>
+			<groupId>org.locationtech</groupId>
+			<artifactId>jts</artifactId>
+			<version>1.13</version>
+		</dependency> -->
 	</dependencies>
 
 	<build>

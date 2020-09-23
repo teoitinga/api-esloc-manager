@@ -401,7 +401,8 @@ try {
 		String nomeDoProdutor = produtores.get(0).getNome().toUpperCase();
 		fileName.append(" -");
 		fileName.append(nomeDoProdutor);
-
+		
+		/*
 		// 4a Parte: SERVICOS
 		for (int i = 0; i < servicosPrestados.size(); i++) {
 			fileName.append(" -");
@@ -427,7 +428,8 @@ try {
 			}
 
 		}
-
+		*/
+		
 		return fileName.toString();
 	}
 

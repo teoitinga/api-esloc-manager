@@ -51,7 +51,12 @@ public class AtendimentoServiceImpl implements AtendimentoService{
 
 	@Override
 	public List<AtendimentosBasicGetDto> findAll(Pageable pageable) {
-		Page<Atendimento> atd = this.repository.findAllOrderByDataCadastroDesc(pageable);
+		//busca o usuario atual
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+		Persona usuario = personaService.getByCpf(userDetails.getUsername());	
+
+		Page<Atendimento> atd = this.repository.findMyAtendimentosAConcluir(usuario.getCpf(), pageable);
 		return atd.stream().map(atendimento->toAtendimentosBasicGetDto(atendimento)).collect(Collectors.toList());
 	}
 
