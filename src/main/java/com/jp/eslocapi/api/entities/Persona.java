@@ -27,64 +27,68 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table
+@Table(name = "PERSONA")
 public class Persona {
 
-	@Column
+	@Column(name="nome")
 	@NotNull(message = "Não é possível fazer um registro informar o nome")
 	@NotEmpty(message = "Não é possível fazer um registro sem informar o nome")
 	@NotBlank(message = "Não é possível fazer um registro sem informar o nome")
 	private String nome;
 	
 	@Id
-	@Column
+	@Column(name="cpf")
 	@CPF
 	@NotNull(message = "Não é possível fazer um registro sem informar o cpf")
 	@NotEmpty(message = "Não é possível fazer um registro sem informar o cpf")
 	@NotBlank(message = "Não é possível fazer um registro sem informar o cpf")
 	private String cpf;
 	
-	@Column
+	@Column(name="contato")
 	private String fone;
 	
-	@Column
+	@Column(name="nascimento")
 	private LocalDate dataNascimento;
 	
-	@Column
+	@Column(name="cadastro")
 	private LocalDateTime dataCadastro;
 	
-	@Column
+	@Column(name="atualizacao")
 	private LocalDateTime dataAtualizacao;
 	
-	@Column
+	@Column(name="categoria")
 	@Enumerated(EnumType.STRING)
 	private EnumCategoria categoria;
 	
-	@Column
+	@Column(name="permissao")
 	@Enumerated(EnumType.STRING)
 	private EnumPermissao permissao;
 	
-	@Column
+	@Column(name="password")
 	private String password;
 	
-	@Column
+	@Column(name="municipio")
 	private String municipio;
 	
-	@Column
+	@Column(name="sexo")
 	private String endereco;
 
-	@Column
+	@Column(name="cadastrante_cpf")
 	private String cpfCadastrante;
 
-	@Column
+	@Column(name="sexo")
 	@Enumerated(EnumType.STRING)
 	private EnumGender sexo;
 
-	@Column
+	@Column(name="escolaridade")
 	@Enumerated(EnumType.STRING)
 	private EnumEscolaridade escolaridade;
 
-	@Column
+	@Column(name="conselho_registro")
+	@Enumerated(EnumType.STRING)
+	private String conselhoRegistro;
+
+	@Column(name="index_conclusao")
 	private Integer conclusaoCadastro;
 	
 	@PrePersist

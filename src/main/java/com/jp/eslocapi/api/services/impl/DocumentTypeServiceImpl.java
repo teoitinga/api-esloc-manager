@@ -117,7 +117,7 @@ public class DocumentTypeServiceImpl implements DocumentTypeService{
 		//enviando o arquivo
 		this.file.salvar(documento, path, fileName.toString());
 		ArquivosEnviados registro = ArquivosEnviados.builder()
-				.atendimento(String.valueOf(atd.getId()))
+				//.atendimento(String.valueOf(atd.getId()))
 				.emissor(emissor.getCpf())
 				.desccricao(document.getDescricao())
 				.tipoDocumento(document.getAbreviatura())

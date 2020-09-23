@@ -110,7 +110,7 @@ public class GerenciadorImpl implements Gerenciador {
 		atendimento.setEmissor(emissor.getCpf());
 		
 		//Define o responsável pelo atendimento
-		atendimento.setResponsavel(responsavel.getCpf());
+		//atendimento.setResponsavel(responsavel.getCpf());
 		
 		//registra atendimento para cada produtor da list
 		List<Atendimento> servicosPrestados;
@@ -211,7 +211,7 @@ public class GerenciadorImpl implements Gerenciador {
 		LocalDate dataConclusaoPrevista = dataAtendimento.plusDays(tipoDeServico.getTempoEstimado());
 		
 		String emissor = atd.getEmissor();
-		String responsavel = atd.getResponsavel();
+		String responsavel = "";//atd.getResponsavel();
 		
 		// define DAE e ART
 		EnumYesNo emitiuDAE = EnumYesNo.NAO;
@@ -260,17 +260,17 @@ public class GerenciadorImpl implements Gerenciador {
 		TipoServico tiposervico = tipoDeServico;
 
 		return Atendimento.builder()
-				.id(atd.getId())
+				//.id(atd.getId())
 				.dataAtendimento(dataAtendimento)
-				.dataConclusaoPrevista(dataConclusaoPrevista)
+				//.dataConclusaoPrevista(dataConclusaoPrevista)
 				.emissor(emissor)
-				.responsavel(responsavel)
-				.emitiuART(emitiuART)
-				.emitiuDAE(emitiuDAE)
-				.tarefaDescricao(tarefaDescricao)
-				.tiposervico(tiposervico)
-				.valorDoServico(valor)
-				.valorDoDae(valorDae)
+				//.responsavel(responsavel)
+				//.emitiuART(emitiuART)
+				//.emitiuDAE(emitiuDAE)
+				//.tarefaDescricao(tarefaDescricao)
+				//.tiposervico(tiposervico)
+				//.valorDoServico(valor)
+				//.valorDoDae(valorDae)
 				.recomendacoes(recomendacoes)
 				.build();
 	}
@@ -347,22 +347,22 @@ public class GerenciadorImpl implements Gerenciador {
 		LocalDate dataAtendimento = atd.getDataAtendimento();
 		LocalDate dataConclusaoPrevista = dataAtendimento.plusDays(tipoDeServico.getTempoEstimado());
 		String emissor = atd.getEmissor();
-		EnumYesNo emitiuART = atd.getEmitiuART();
-		EnumYesNo emitiuDAE = atd.getEmitiuDAE();
-		String responsavel = atd.getResponsavel();
+		EnumYesNo emitiuART =null; //atd.getEmitiuART();
+		EnumYesNo emitiuDAE = null;//atd.getEmitiuDAE();
+		String responsavel = null;//atd.getResponsavel();
 		String recomendacoes = atd.getRecomendacoes();
 		String tarefaDescricao = servico.getDescricaoDoServico();
 		Persona produtor = atd.getProdutor();
 		TipoServico tiposervico = tipoDeServico;
-		BigDecimal valorDoServico = atd.getValorDoServico();
+		BigDecimal valorDoServico = null;//atd.getValorDoServico();
 		return Atendimento.builder().produtor(produtor)
 				.dataAtendimento(dataAtendimento)
-				.dataConclusaoPrevista(dataConclusaoPrevista)
-				.emissor(emissor).responsavel(responsavel)
-				.emitiuART(emitiuART).emitiuDAE(emitiuDAE)
-				.tarefaDescricao(tarefaDescricao)
-				.tiposervico(tiposervico)
-				.valorDoServico(valorDoServico)
+				//.dataConclusaoPrevista(dataConclusaoPrevista)
+				//.emissor(emissor).responsavel(responsavel)
+				//.emitiuART(emitiuART).emitiuDAE(emitiuDAE)
+				//.tarefaDescricao(tarefaDescricao)
+				//.tiposervico(tiposervico)
+				//.valorDoServico(valorDoServico)
 				.recomendacoes(recomendacoes)
 				.build();
 	}
@@ -467,18 +467,18 @@ try {
 		Atendimento atd = new Atendimento();
 		Persona prd = produtor;
 		atd = Atendimento.builder()
-				.tiposervico(atendimento.getTiposervico())
+				//.tiposervico(atendimento.getTiposervico())
 				.dataAtendimento(atendimento.getDataAtendimento())
 				.responsavel(atendimento.getResponsavel())
 				.emissor(atendimento.getEmissor())
-				.valorDoServico(atendimento.getValorDoServico()).tarefaDescricao(atendimento.getTarefaDescricao())
-				.emitiuDAE(atendimento.getEmitiuDAE())
-				.emitiuART(atendimento.getEmitiuART())
-				.dataConclusaoPrevista(atendimento.getDataConclusaoPrevista())
-				.statusTarefa(atendimento.getStatusTarefa())
+				//.valorDoServico(atendimento.getValorDoServico()).tarefaDescricao(atendimento.getTarefaDescricao())
+				//.emitiuDAE(atendimento.getEmitiuDAE())
+				//.emitiuART(atendimento.getEmitiuART())
+				//.dataConclusaoPrevista(atendimento.getDataConclusaoPrevista())
+				//.statusTarefa(atendimento.getStatusTarefa())
 				.emissor(atendimento.getEmissor())
 				.responsavel(atendimento.getResponsavel())
-				.statusTarefa(EnumStatus.INICIADA)
+				//.statusTarefa(EnumStatus.INICIADA)
 				.recomendacoes(recomendacoes)
 				.codigo(atendimento.getCodigo())
 				.produtor(prd).build();

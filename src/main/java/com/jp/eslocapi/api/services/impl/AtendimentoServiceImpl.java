@@ -68,12 +68,12 @@ public class AtendimentoServiceImpl implements AtendimentoService{
 			dataDoAtendimento = null;
 		}
 		return AtendimentoBasicDto.builder()
-				.descricaoDoServico(atendimento.getTarefaDescricao())
-				.CodDoServico(atendimento.getTiposervico().getDescricaoTipo())
-				.valorDoDae(atendimento.getValorDoDae().toString())
-				.valorDoServico(atendimento.getValorDoServico().toString())
-				.emitiuArt(atendimento.getEmitiuART().toString())
-				.emitiuDae(atendimento.getEmitiuDAE().toString())
+				//.descricaoDoServico(atendimento.getTarefaDescricao())
+				//.CodDoServico(atendimento.getTiposervico().getDescricaoTipo())
+				//.valorDoDae(atendimento.getValorDoDae().toString())
+				//.valorDoServico(atendimento.getValorDoServico().toString())
+				//.emitiuArt(atendimento.getEmitiuART().toString())
+				//.emitiuDae(atendimento.getEmitiuDAE().toString())
 				.build();
 	}
 	private AtendimentosBasicGetDto toAtendimentosBasicGetDto(Atendimento atendimento) {
@@ -87,27 +87,27 @@ public class AtendimentoServiceImpl implements AtendimentoService{
 
 		String valorDAE = null;
 		try {
-			valorDAE = atendimento.getValorDoDae().toString();
+			//valorDAE = atendimento.getValorDoDae().toString();
 		}catch(NullPointerException ex) {
 			valorDAE = BigDecimal.ZERO.toString();
 		}
 		String valorServico = null;
 		try {
-			valorServico = atendimento.getValorDoServico().toString();
+			//valorServico = atendimento.getValorDoServico().toString();
 		}catch(NullPointerException ex) {
 			valorServico = BigDecimal.ZERO.toString();
 		}
 		
 		return AtendimentosBasicGetDto.builder()
-				.id(String.valueOf(atendimento.getId()))
-				.dataDoAtendimento(dataDoAtendimento )
+				//.id(String.valueOf(atendimento.getId()))
+				//.dataDoAtendimento(dataDoAtendimento )
 				.produtor(atendimento.getProdutor().getNome())
-				.descricaoDoServico(atendimento.getTarefaDescricao())
+				//.descricaoDoServico(atendimento.getTarefaDescricao())
 				.recomendacoes(atendimento.getRecomendacoes())
-				.emitiuArt(atendimento.getEmitiuART().toString())
-				.emitiuDae(atendimento.getEmitiuDAE().toString())
-				.servico(atendimento.getTiposervico().getDescricaoTipo())
-				.valorDae(valorDAE)
+				//.emitiuArt(atendimento.getEmitiuART().toString())
+				//.emitiuDae(atendimento.getEmitiuDAE().toString())
+				//.servico(atendimento.getTiposervico().getDescricaoTipo())
+				//.valorDae(valorDAE)
 				.valorServico(valorServico)
 				.build();
 	}
@@ -141,7 +141,7 @@ public class AtendimentoServiceImpl implements AtendimentoService{
 		//verifica integridade da informação do status
 		try {
 			EnumStatus newStatus = EnumStatus.valueOf(status);
-			atd.setStatusTarefa(newStatus);
+			//atd.setStatusTarefa(newStatus);
 			//busca o usuario atual
 			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
 	                .getPrincipal();
@@ -162,7 +162,7 @@ public class AtendimentoServiceImpl implements AtendimentoService{
 		
 		Persona rsp = this.personaService.getByCpf(responsavel);
 		
-		atd.setResponsavel(rsp.getCpf());
+		//atd.setResponsavel(rsp.getCpf());
 		
 		this.repository.save(atd);
 		
@@ -175,8 +175,8 @@ public class AtendimentoServiceImpl implements AtendimentoService{
 		BigDecimal valorDoServico = valores.getValorDoServico();
 		BigDecimal valorCobrado= valores.getValorCobrado();
 		
-		atd.setValorDoServico(valorDoServico);
-		atd.setValorDoDae(valorCobrado);
+		//atd.setValorDoServico(valorDoServico);
+		//atd.setValorDoDae(valorCobrado);
 		//busca o usuario atual
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();

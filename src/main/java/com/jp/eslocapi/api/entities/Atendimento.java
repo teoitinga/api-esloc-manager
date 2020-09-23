@@ -1,23 +1,17 @@
 package com.jp.eslocapi.api.entities;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
-import javax.validation.constraints.Digits;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -32,78 +26,43 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @EqualsAndHashCode
+@Table(name="ATENDIMENTO")
 public class Atendimento {
 	@Id
-	@Column
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@NotNull(message = "Você deve informar o produtor que solicitou o serviço.")
-	private Persona produtor;
-	
-	@Column(name = "responsavel_cpf")
-	private String responsavel;
+	@Column(name = "codigo")
+	private String codigo;
 
-	@Column(name = "emissor_cpf")
-	private String emissor;
-	
 	@Column(name = "recomendacoes")
 	private String recomendacoes;
 
-	@Column(name = "codigo_atendimento")
-	private String codigo;
-
-	@Column
-	private String tarefaDescricao;
-	
-	@Column
-	private LocalDateTime dataCadastro;
-
-	@Column
+	@Column(name = "data_atendimento")
 	private LocalDate dataAtendimento;
 	
-	@Column
+	@Column(name = "atualizacao")
 	private LocalDateTime dataAtualizacao;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_service")
-	private TipoServico tiposervico;
+	@Column(name = "cadastro")
+	private LocalDateTime dataCadastro;
 
-	@Column
-	@Digits(integer=6, fraction=2)
-	private BigDecimal valorDoServico;
+	@Column(name = "status_atendimento")
+	private EnumStatus status;
+	
+	@Column(name = "publicar")
+	private Boolean tornarPublico;	
 
-	@Column
-	@Digits(integer=6, fraction=2)
-	private BigDecimal valorDoDae;
+	@ManyToOne
+	@NotNull(message = "Você deve informar o produtor que solicitou o serviço.")
+	@Column(name = "produtor")
+	private Persona produtor;
 	
-	@Column
-	@Enumerated(EnumType.STRING)
-	private EnumYesNo emitiuDAE;
-	
-	@Column
-	private LocalDate datapgtoDAE;
+	@ManyToOne
+	@Column(name = "responsavel_tecnico")
+	private Persona responsavel;
 
-	@Column
-	@Enumerated(EnumType.STRING)
-	private EnumYesNo emitiuART;
+	@ManyToOne
+	@Column(name = "emissor")
+	private String emissor;
 
-	@Column
-	private LocalDate datapgtoART;	
-	
-	@Column
-	private LocalDateTime dataFinalizada;
-	
-	@Column
-	@Enumerated(EnumType.STRING)
-	private EnumStatus statusTarefa;
-	
-	@Column
-	private LocalDate dataConclusaoPrevista;
-
-	@Column(name = "tornar_publico")
-	private Boolean tornarPublico;
 	
 	@PrePersist
 	public void setDataCadastro() {
